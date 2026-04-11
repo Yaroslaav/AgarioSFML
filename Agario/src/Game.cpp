@@ -7,7 +7,6 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
-#include <SFML/Window/Keyboard.hpp>
 #include <optional>
 
 namespace Agario
@@ -34,10 +33,8 @@ namespace Agario
 
     void Game::OnUpdate(Engine::Application& app, const float deltaTime)
     {
-        sf::Vector2f movement = {0.f, 0.f};
-
-        sf::Vector2f dir = app.GetInput().GetLastMousePosition() - m_player.getPosition();
-        if (dir.x != 0.f || dir.y != 0.f)
+        if (const sf::Vector2f dir = app.GetInput().GetLastMousePosition() - m_player.getPosition();
+            dir.x != 0.f || dir.y != 0.f)
         {
             m_player.move(dir.normalized() * m_speed * deltaTime);
         }
