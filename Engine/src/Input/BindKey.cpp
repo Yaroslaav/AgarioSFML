@@ -2,7 +2,7 @@
 
 namespace Engine
 {
-    BindKey::BindKey(std::string actionName, sf::Keyboard::Key key) :
+    BindKey::BindKey(std::string actionName, const sf::Keyboard::Key key) :
         m_actionName(std::move(actionName)), m_key(key)
     {
     }

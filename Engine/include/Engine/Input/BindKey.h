@@ -26,7 +26,7 @@ namespace Engine
         }
     private:
         std::string m_actionName;
-        sf::Keyboard::Key m_key = sf::Keyboard::Key::Unknown;
+        sf::Keyboard::Key m_key;
 
         bool m_wasPressed = false;
         bool m_isPressed = false;
