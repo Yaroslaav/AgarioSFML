@@ -1,22 +1,12 @@
-#include <SFML/Graphics.hpp>
+#include "../../Engine/include/Engine/core/Application.h"
+#include "Agario/Game.h"
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode({1280, 720}), "Agario");
+    Engine::Application app(1280, 720, "Agario");
+    Agario::Game game;
 
-    while (window.isOpen())
-    {
-        while (const std::optional event = window.pollEvent())
-        {
-            if (event->is<sf::Event::Closed>())
-            {
-                window.close();
-            }
-        }
-
-        window.clear();
-        window.display();
-    }
+    app.Run(game);
 
     return 0;
 }
