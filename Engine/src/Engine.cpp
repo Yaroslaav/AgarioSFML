@@ -1,0 +1,6 @@
+namespace Engine
+{
+    void Dummy()
+    {
+    }
+}

@@ -1,19 +1,20 @@
 # Build folders
 /build/
 /out/
-/bin/
-/obj/
-/x64/
-/x86/
-/Debug/
-/Release/
 /cmake-build-*/
 
-# Rider / IntelliJ
-.idea/
+# CMake
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+compile_commands.json
 
-# Visual Studio
+# IDE
+.idea/
 .vs/
+
+# Visual Studio junk
 *.VC.db
 *.VC.VC.opendb
 *.suo
@@ -21,25 +22,22 @@
 *.userosscache
 *.sln.docstates
 
-# CMake generated files
-CMakeCache.txt
-CMakeFiles/
-Makefile
-cmake_install.cmake
-compile_commands.json
+# Binaries
+*.exe
+*.dll
+*.obj
+*.pdb
 
-# Logs
+# Logs & temp
 *.log
-
-# Temporary files
 *.tmp
 *.temp
 
-# SFML / external downloaded libs if added locally
-/external/
+# External libs (keep source, ignore builds)
+/external/*/build/
 /vendor/
 /deps/
 
-# OS files
+# OS
 .DS_Store
 Thumbs.db
