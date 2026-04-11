@@ -1,9 +1,12 @@
 add_library(Engine STATIC
-        src/core/Application.cpp
-        include/Engine/input/InputManager.h
-        include/Engine/input/BindKey.h
-        src/input/BindKey.cpp
+        src/Core/Application.cpp
+        include/Engine/Input/InputManager.h
+        include/Engine/Input/BindKey.h
+        src/Input/BindKey.cpp
         src/Input/InputManager.cpp
+        include/Engine/GameplayTags/GameplayTag.h
+        include/Engine/GameplayTags/GameplayTagContainer.h
+        src/GameplayTags/GameplayTagContainer.cpp
 )
 
 target_include_directories(Engine PUBLIC

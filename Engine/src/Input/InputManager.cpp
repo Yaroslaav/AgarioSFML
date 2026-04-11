@@ -1,5 +1,7 @@
 #include "Engine/Input/InputManager.h"
 
+#include <utility>
+
 namespace Engine
 {
     void InputManager::Update(const sf::RenderWindow& window)
@@ -21,9 +23,9 @@ namespace Engine
         }
     }
 
-    BindKey& InputManager::AddNewBind(sf::Keyboard::Key key, std::string &name)
+    BindKey& InputManager::AddNewBind(sf::Keyboard::Key key, GameplayTag actionTag)
     {
-        m_keys.emplace_back(name, key);
+        m_keys.emplace_back(std::move(actionTag), key);
         return m_keys.back();
     }
 }

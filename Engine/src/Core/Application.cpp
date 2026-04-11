@@ -1,5 +1,5 @@
-#include "../../include/Engine/Core/Application.h"
-#include "../../include/Engine/Core/IGame.h"
+#include "Engine/Core/Application.h"
+#include "Engine/Core/IGame.h"
 
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Clock.hpp>

@@ -1,9 +1,11 @@
 #include "Engine/Input/BindKey.h"
 
+#include <utility>
+
 namespace Engine
 {
-    BindKey::BindKey(std::string actionName, const sf::Keyboard::Key key) :
-        m_actionName(std::move(actionName)), m_key(key)
+    BindKey::BindKey(GameplayTag actionTag, const sf::Keyboard::Key key) :
+        m_actionTag(std::move(actionTag)), m_key(key)
     {
     }
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../../Engine/include/Engine/Core/IGame.h"
+#include "Engine/Core/IGame.h"
 #include <SFML/Graphics/CircleShape.hpp>
 
 namespace Agario

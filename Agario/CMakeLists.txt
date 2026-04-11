@@ -1,6 +1,7 @@
 add_executable(Agario
         src/main.cpp
         src/Game.cpp
+        include/Agario/GameTags.h
 )
 
 target_include_directories(Agario PUBLIC

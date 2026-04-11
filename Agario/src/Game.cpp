@@ -1,8 +1,6 @@
 #include "Agario/Game.h"
 
-#include <iostream>
-
-#include "../../Engine/include/Engine/Core/Application.h"
+#include "Engine/Core/Application.h"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Vector2.hpp>

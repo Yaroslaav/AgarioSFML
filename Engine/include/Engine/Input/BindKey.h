@@ -1,9 +1,9 @@
 #pragma once
 
 #include <functional>
-#include <string>
 #include <vector>
 
+#include "Engine/GameplayTags/GameplayTag.h"
 #include "SFML/Window/Keyboard.hpp"
 
 namespace Engine
@@ -11,7 +11,11 @@ namespace Engine
     class BindKey
     {
     public:
-        BindKey(std::string actionName, sf::Keyboard::Key key);
+        BindKey(GameplayTag actionTag, sf::Keyboard::Key key);
+        BindKey(const BindKey&) = delete;
+        BindKey& operator=(const BindKey&) = delete;
+        BindKey(BindKey&&) = default;
+        BindKey& operator=(BindKey&&) = default;
 
         void CheckInput();
         void CheckKeyboardInput();
@@ -25,7 +29,7 @@ namespace Engine
             return m_key;
         }
     private:
-        std::string m_actionName;
+        GameplayTag m_actionTag;
         sf::Keyboard::Key m_key;
 
         bool m_wasPressed = false;
