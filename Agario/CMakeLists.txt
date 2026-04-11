@@ -6,4 +6,9 @@ target_include_directories(Agario PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-target_link_libraries(Agario PRIVATE Engine)
+target_link_libraries(Agario PRIVATE
+    Engine
+    SFML::Graphics
+    SFML::Window
+    SFML::System
+)
