@@ -1,4 +1,4 @@
-#include "../../Engine/include/Engine/core/Application.h"
+#include "../../Engine/include/Engine/Core/Application.h"
 #include "Agario/Game.h"
 
 int main()

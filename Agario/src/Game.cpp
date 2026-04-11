@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "../../Engine/include/Engine/core/Application.h"
+#include "../../Engine/include/Engine/Core/Application.h"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -36,27 +36,12 @@ namespace Agario
     {
         sf::Vector2f movement = {0.f, 0.f};
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
+        sf::Vector2f dir = app.GetInput().GetLastMousePosition() - m_player.getPosition();
+        if (dir.x != 0.f || dir.y != 0.f)
         {
-            movement.y -= m_speed * deltaTime;
+            m_player.move(dir.normalized() * m_speed * deltaTime);
         }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
-        {
-            movement.y += m_speed * deltaTime;
-        }
-
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
-        {
-            movement.x -= m_speed * deltaTime;
-        }
-
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
-        {
-            movement.x += m_speed * deltaTime;
-        }
-
-        m_player.move(movement);
     }
 
     void Game::OnRender(Engine::Application& app)

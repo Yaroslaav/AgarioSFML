@@ -1,5 +1,5 @@
-#include "../../include/Engine/core/Application.h"
-#include "../../include/Engine/core/IGame.h"
+#include "../../include/Engine/Core/Application.h"
+#include "../../include/Engine/Core/IGame.h"
 
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Clock.hpp>
@@ -23,6 +23,8 @@ namespace Engine
         {
             const float deltaTime = clock.restart().asSeconds();
 
+            m_input.Update(m_window);
+
             game.OnEvent(*this);
             game.OnUpdate(*this, deltaTime);
 
@@ -37,10 +39,5 @@ namespace Engine
     void Application::Close()
     {
         m_window.close();
-    }
-
-    sf::RenderWindow& Application::GetWindow()
-    {
-        return m_window;
     }
 }

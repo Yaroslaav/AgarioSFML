@@ -3,6 +3,8 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <string>
 
+#include "Engine/Input/InputManager.h"
+
 namespace Engine
 {
     class IGame;
@@ -15,9 +17,17 @@ namespace Engine
         void Run(IGame& game);
         void Close();
 
-        sf::RenderWindow& GetWindow();
+        [[nodiscard]] sf::RenderWindow& GetWindow()
+        {
+            return m_window;
+        }
+        [[nodiscard]] InputManager& GetInput()
+        {
+            return m_input;
+        }
 
     private:
         sf::RenderWindow m_window;
+        InputManager m_input;
     };
 }
