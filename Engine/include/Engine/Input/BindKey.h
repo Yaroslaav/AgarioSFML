@@ -20,9 +20,9 @@ namespace Engine
         void CheckInput();
         void CheckKeyboardInput();
 
-        void AssignOnKeyPress(std::function<void()> callback);
-        void AssignOnKeyDown(std::function<void()> callback);
-        void AssignOnKeyUp(std::function<void()> callback);
+        void AssignOnKeyPressedOnce(std::function<void()> callback);
+        void AssignOnKeyHeld(std::function<void()> callback);
+        void AssignOnKeyReleased(std::function<void()> callback);
 
         [[nodiscard]] sf::Keyboard::Key GetKey() const
         {
@@ -35,8 +35,8 @@ namespace Engine
         bool m_wasPressed = false;
         bool m_isPressed = false;
 
-        std::vector<std::function<void()>> m_OnPressed;
-        std::vector<std::function<void()>> m_OnDown;
-        std::vector<std::function<void()>> m_OnUp;
+        std::vector<std::function<void()>> m_OnPressedOnce;
+        std::vector<std::function<void()>> m_OnHeld;
+        std::vector<std::function<void()>> m_OnReleased;
     };
 }

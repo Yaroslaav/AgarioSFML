@@ -4,15 +4,15 @@
 
 namespace Engine
 {
-    void InputManager::Update(const sf::RenderWindow& window)
+    void InputManager::Update(const Window& window)
     {
         CheckKeys();
         CheckMouseInput(window);
     }
 
-    void InputManager::CheckMouseInput(const sf::RenderWindow& window)
+    void InputManager::CheckMouseInput(const Window& window)
     {
-        m_lastMousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+        m_lastMousePosition = window.MapPixelToCoords(window.GetMousePixelPosition());
     }
 
     void InputManager::CheckKeys()

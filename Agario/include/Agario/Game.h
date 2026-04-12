@@ -16,6 +16,7 @@ namespace Agario
 
     private:
         sf::CircleShape m_player;
+        sf::CircleShape m_center;
         float m_speed = 250.f;
     };
 }

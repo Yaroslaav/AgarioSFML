@@ -2,9 +2,7 @@
 
 #include "Engine/Core/Application.h"
 
-#include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Vector2.hpp>
-#include <SFML/Window/Event.hpp>
 #include <optional>
 
 namespace Agario
@@ -14,13 +12,17 @@ namespace Agario
         m_player.setRadius(30.f);
         m_player.setOrigin({30.f, 30.f});
         m_player.setPosition({640.f, 360.f});
+
+        m_center.setRadius(10.f);
+        m_center.setOrigin({10.f, 10.f});
+        m_center.setPosition({640.f, 360.f});
     }
 
     void Game::OnEvent(Engine::Application& app)
     {
         auto& window = app.GetWindow();
 
-        while (const std::optional event = window.pollEvent())
+        while (const std::optional event = window.PollEvent())
         {
             if (event->is<sf::Event::Closed>())
             {
@@ -41,7 +43,8 @@ namespace Agario
 
     void Game::OnRender(Engine::Application& app)
     {
-        app.GetWindow().draw(m_player);
+        app.GetWindow().Draw(m_player);
+        app.GetWindow().Draw(m_center);
     }
 
     void Game::OnShutdown(Engine::Application& app)

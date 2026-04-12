@@ -3,14 +3,13 @@
 
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Clock.hpp>
-#include <SFML/Window/Event.hpp>
 
 namespace Engine
 {
     Application::Application(const unsigned int width, const unsigned int height, const std::string& title)
-        : m_window(sf::VideoMode({width, height}), title)
+        : m_window(width, height, title, 144)
     {
-        m_window.setFramerateLimit(144);
+        m_window.Init(*this);
     }
 
     void Application::Run(IGame& game)
@@ -19,7 +18,7 @@ namespace Engine
 
         sf::Clock clock;
 
-        while (m_window.isOpen())
+        while (m_window.IsOpen())
         {
             const float deltaTime = clock.restart().asSeconds();
 
@@ -28,9 +27,9 @@ namespace Engine
             game.OnEvent(*this);
             game.OnUpdate(*this, deltaTime);
 
-            m_window.clear(sf::Color::Black);
+            m_window.Clear(sf::Color::Black);
             game.OnRender(*this);
-            m_window.display();
+            m_window.Display();
         }
 
         game.OnShutdown(*this);
@@ -38,6 +37,6 @@ namespace Engine
 
     void Application::Close()
     {
-        m_window.close();
+        m_window.Close();
     }
 }

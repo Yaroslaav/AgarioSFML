@@ -1,9 +1,9 @@
 #pragma once
 
-#include <SFML/Graphics/RenderWindow.hpp>
 #include <string>
 
 #include "Engine/Input/InputManager.h"
+#include "Engine/View/Window.h"
 
 namespace Engine
 {
@@ -17,7 +17,11 @@ namespace Engine
         void Run(IGame& game);
         void Close();
 
-        [[nodiscard]] sf::RenderWindow& GetWindow()
+        [[nodiscard]] Window& GetWindow()
+        {
+            return m_window;
+        }
+        [[nodiscard]] const Window& GetWindow() const
         {
             return m_window;
         }
@@ -27,7 +31,7 @@ namespace Engine
         }
 
     private:
-        sf::RenderWindow m_window;
+        Window m_window;
         InputManager m_input;
     };
 }

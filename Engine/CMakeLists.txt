@@ -7,6 +7,11 @@ add_library(Engine STATIC
         include/Engine/GameplayTags/GameplayTag.h
         include/Engine/GameplayTags/GameplayTagContainer.h
         src/GameplayTags/GameplayTagContainer.cpp
+        include/Engine/View/Window.h
+        include/Engine/View/Camera.h
+        src/View/Camera.cpp
+        src/View/Window.cpp
+        include/Engine/GameplayTags/GameTags.h
 )
 
 target_include_directories(Engine PUBLIC

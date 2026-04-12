@@ -3,7 +3,7 @@
 #include <deque>
 
 #include "BindKey.h"
-#include "SFML/Graphics/RenderWindow.hpp"
+#include "Engine/View/Window.h"
 #include "SFML/System/Vector2.hpp"
 
 namespace Engine
@@ -12,9 +12,9 @@ namespace Engine
     {
     public:
 
-        void Update(const sf::RenderWindow& window);
+        void Update(const Window& window);
 
-        void CheckMouseInput(const sf::RenderWindow& window);
+        void CheckMouseInput(const Window& window);
         void CheckKeys();
 
         BindKey& AddNewBind(sf::Keyboard::Key key, GameplayTag actionTag);
