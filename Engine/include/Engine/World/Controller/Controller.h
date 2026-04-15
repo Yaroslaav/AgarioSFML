@@ -29,6 +29,8 @@ namespace Engine
             return dynamic_cast<T*>(m_pawn);
         }
 
+        static sf::Vector2f NormalizeOrZero(const sf::Vector2f vector);
+
     private:
         Actor* m_pawn = nullptr;
     };

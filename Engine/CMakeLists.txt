@@ -13,8 +13,10 @@ add_library(Engine STATIC
         src/Components/MovementComponent.cpp
         include/Engine/World/Actor.h
         include/Engine/World/Controller/Controller.h
+        include/Engine/World/Controller/AIController.h
         include/Engine/World/Controller/PlayerController.h
         src/World/Actor.cpp
+        src/World/Controller/AIController.cpp
         src/World/Controller/PlayerController.cpp
         include/Engine/View/Window.h
         include/Engine/View/Camera.h
@@ -28,6 +30,8 @@ add_library(Engine STATIC
         include/Engine/GameplayTags/GameTags.h
         include/Engine/World/World.h
         src/World/World.cpp
+        include/Engine/World/Controller/AIController.h
+        src/World/Controller/Controller.cpp
 )
 
 target_include_directories(Engine PUBLIC

@@ -5,13 +5,14 @@
 
 namespace Agario
 {
-    Cell::Cell(const float radius, const sf::Color& color, const sf::Vector2f& startPosition)
+    Cell::Cell(const float radius, const sf::Color& color, const sf::Vector2f& startPosition, const float maxSpeed)
     {
         m_shape.setRadius(radius);
         m_shape.setOrigin({radius, radius});
         m_shape.setFillColor(color);
         GetTransform().SetPosition(startPosition);
-        AddComponent<Engine::MovementComponent>();
+        auto* movementComponent = AddComponent<Engine::MovementComponent>();
+        movementComponent->SetMaxSpeed(maxSpeed);
     }
 
     void Cell::Render(Engine::Application& app)

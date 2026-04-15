@@ -11,7 +11,7 @@ namespace Agario
     class Cell : public Engine::Actor
     {
     public:
-        Cell(float radius, const sf::Color& color, const sf::Vector2f& startPosition);
+        Cell(float radius, const sf::Color& color, const sf::Vector2f& startPosition, float maxSpeed = 250.f);
 
         void Render(Engine::Application& app) override;
 
