@@ -9,10 +9,10 @@ namespace Engine
     m_frameRate(frameRate),
     m_title(title),
     m_renderWindow(sf::VideoMode({width, height}), title),
-    m_camera(sf::Vector2f(static_cast<float>(width)*0.5f, static_cast<float>(height)*0.5f),
-                                                                    sf::Vector2f(width, height))
+    m_defaultCamera(sf::Vector2f(static_cast<float>(width) * 0.5f, static_cast<float>(height) * 0.5f),
+                    sf::Vector2f(width, height))
     {
-        m_renderWindow.setView(m_camera.GetView());
+        m_renderWindow.setView(m_defaultCamera.GetView());
         m_renderWindow.setFramerateLimit(m_frameRate);
     }
 
@@ -52,7 +52,7 @@ namespace Engine
         return m_renderWindow.getSize();
     }
 
-    void Window::SetFrameRateLimit(unsigned int limit)
+    void Window::SetFrameRateLimit(const unsigned int limit)
     {
         m_renderWindow.setFramerateLimit(limit);
     }
@@ -72,8 +72,8 @@ namespace Engine
         m_renderWindow.create(mode, m_title, style);
         m_renderWindow.setFramerateLimit(m_frameRate);
 
-        m_camera.SetSize(static_cast<sf::Vector2f>(GetSize()));
-        m_renderWindow.setView(m_camera.GetView());
+        GetCurrentCamera().SetSize(static_cast<sf::Vector2f>(GetSize()));
+        m_renderWindow.setView(GetCurrentCamera().GetView());
     }
 
     void Window::SetWindowed()
@@ -103,20 +103,20 @@ namespace Engine
             SetFullScreen();
     }
 
-    void Window::SetCamera(const Camera &camera)
+    void Window::SetCamera(Camera& camera)
     {
-        m_camera = camera;
-        m_renderWindow.setView(m_camera.GetView());
+        m_activeCamera = &camera;
+        m_renderWindow.setView(m_activeCamera->GetView());
     }
 
     Camera & Window::GetCurrentCamera()
     {
-        return m_camera;
+        return m_activeCamera ? *m_activeCamera : m_defaultCamera;
     }
 
     const Camera & Window::GetCurrentCamera() const
     {
-        return m_camera;
+        return m_activeCamera ? *m_activeCamera : m_defaultCamera;
     }
 
     sf::Vector2f Window::GetMouseWorldPosition() const

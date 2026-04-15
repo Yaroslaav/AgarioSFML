@@ -5,16 +5,18 @@ namespace Engine
     Camera::Camera(const sf::Vector2f &center, const sf::Vector2f &size) :
         m_view(center, size)
     {
+        SetCenter(center);
     }
 
     void Camera::SetCenter(const sf::Vector2f &center)
     {
+        GetTransform().SetPosition(center);
         m_view.setCenter(center);
     }
 
     void Camera::Move(const sf::Vector2f &offset)
     {
-        m_view.move(offset);
+        SetCenter(GetCenter() + offset);
     }
 
     void Camera::SetSize(const sf::Vector2f &size)
@@ -25,5 +27,28 @@ namespace Engine
     void Camera::Zoom(const float magnitude)
     {
         m_view.zoom(magnitude);
+    }
+
+    void Camera::SetFocusActor(const Actor &target)
+    {
+        m_focusedTransform = target.GetComponent<TransformComponent>();
+    }
+
+    void Camera::ClearFocusActor()
+    {
+        m_focusedTransform = nullptr;
+    }
+
+    void Camera::Tick(Application &app, const float deltaTime)
+    {
+        Actor::Tick(app, deltaTime);
+
+        if (m_focusedTransform != nullptr)
+        {
+            SetCenter(m_focusedTransform->GetPosition());
+            return;
+        }
+
+        m_view.setCenter(GetTransform().GetPosition());
     }
 }

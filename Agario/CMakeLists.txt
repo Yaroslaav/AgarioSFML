@@ -1,7 +1,11 @@
 add_executable(Agario
         src/main.cpp
         src/Game.cpp
-        include/Agario/GameTags.h
+        src/World/PlayerActor.cpp
+        src/World/CenterMarkerActor.cpp
+        include/Agario/World/PlayerActor.h
+        include/Agario/World/CenterMarkerActor.h
+        include/Agario/GameplayTags/GameTags.h
 )
 
 target_include_directories(Agario PUBLIC

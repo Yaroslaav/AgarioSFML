@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Core/IGame.h"
-#include <SFML/Graphics/CircleShape.hpp>
+#include "Engine/World/World.h"
 
 namespace Agario
 {
@@ -15,8 +15,6 @@ namespace Agario
         void OnShutdown(Engine::Application& app) override;
 
     private:
-        sf::CircleShape m_player;
-        sf::CircleShape m_center;
-        float m_speed = 250.f;
+        Engine::World m_world;
     };
 }

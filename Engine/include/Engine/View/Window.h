@@ -35,7 +35,7 @@ namespace Engine
         void SetFullScreen();
         void ToggleFullScreen();
 
-        void SetCamera(const Camera& camera);
+        void SetCamera(Camera& camera);
         [[nodiscard]] Camera& GetCurrentCamera();
         [[nodiscard]] const Camera& GetCurrentCamera() const;
 
@@ -51,7 +51,8 @@ namespace Engine
         unsigned int m_frameRate;
         std::string m_title;
         sf::RenderWindow m_renderWindow;
-        Camera m_camera;
+        Camera m_defaultCamera;
+        Camera* m_activeCamera = nullptr;
 
         bool m_isFullscreen = false;
         sf::Vector2u m_windowedSize = {1280, 720};

@@ -1,10 +1,11 @@
 #pragma once
+#include "Engine/World/Actor.h"
 #include "SFML/Graphics/View.hpp"
 #include "SFML/System/Vector2.hpp"
 
 namespace Engine
 {
-    class Camera
+    class Camera : public Actor
     {
     public:
         Camera() = default;
@@ -16,9 +17,12 @@ namespace Engine
         void SetSize(const sf::Vector2f& size);
         void Zoom(float magnitude);
 
+        void SetFocusActor(const Actor& target);
+        void ClearFocusActor();
+
         sf::Vector2f GetCenter() const
         {
-            return m_view.getCenter();
+            return GetTransform().GetPosition();
         }
         sf::Vector2f GetSize() const
         {
@@ -34,7 +38,10 @@ namespace Engine
             return m_view;
         }
 
+        void Tick(Application& app, float deltaTime) override;
+
     private:
         sf::View m_view;
+        const TransformComponent* m_focusedTransform = nullptr;
     };
 }

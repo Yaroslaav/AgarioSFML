@@ -28,6 +28,7 @@ namespace Engine
             game.OnUpdate(*this, deltaTime);
 
             m_window.Clear(sf::Color::Black);
+            m_renderSystem.DrawAll(m_window);
             game.OnRender(*this);
             m_window.Display();
         }

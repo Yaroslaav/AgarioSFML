@@ -3,6 +3,7 @@
 #include <string>
 
 #include "Engine/Input/InputManager.h"
+#include "Engine/View/RenderSystem.h"
 #include "Engine/View/Window.h"
 
 namespace Engine
@@ -29,9 +30,18 @@ namespace Engine
         {
             return m_input;
         }
+        [[nodiscard]] RenderSystem& GetRenderSystem()
+        {
+            return m_renderSystem;
+        }
+        [[nodiscard]] const RenderSystem& GetRenderSystem() const
+        {
+            return m_renderSystem;
+        }
 
     private:
         Window m_window;
         InputManager m_input;
+        RenderSystem m_renderSystem;
     };
 }

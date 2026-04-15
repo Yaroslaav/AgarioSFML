@@ -7,11 +7,22 @@ add_library(Engine STATIC
         include/Engine/GameplayTags/GameplayTag.h
         include/Engine/GameplayTags/GameplayTagContainer.h
         src/GameplayTags/GameplayTagContainer.cpp
+        include/Engine/Components/ActorComponent.h
+        include/Engine/Components/TransformComponent.h
+        include/Engine/World/Actor.h
+        src/World/Actor.cpp
         include/Engine/View/Window.h
         include/Engine/View/Camera.h
+        include/Engine/View/RenderHandle.h
+        include/Engine/View/RenderComponent.h
+        include/Engine/View/RenderSystem.h
         src/View/Camera.cpp
+        src/View/RenderComponent.cpp
+        src/View/RenderSystem.cpp
         src/View/Window.cpp
         include/Engine/GameplayTags/GameTags.h
+        include/Engine/World/World.h
+        src/World/World.cpp
 )
 
 target_include_directories(Engine PUBLIC
