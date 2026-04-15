@@ -1,0 +1,32 @@
+#pragma once
+
+#include "Engine/World/Actor.h"
+
+#include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/System/Vector2.hpp>
+
+namespace Agario
+{
+    class Cell : public Engine::Actor
+    {
+    public:
+        Cell(float radius, const sf::Color& color, const sf::Vector2f& startPosition);
+
+        void Render(Engine::Application& app) override;
+
+    protected:
+        sf::CircleShape& GetShape()
+        {
+            return m_shape;
+        }
+
+        const sf::CircleShape& GetShape() const
+        {
+            return m_shape;
+        }
+
+    private:
+        sf::CircleShape m_shape;
+    };
+}

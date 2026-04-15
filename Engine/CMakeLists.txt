@@ -15,7 +15,7 @@ add_library(Engine STATIC
         include/Engine/World/Controller/Controller.h
         include/Engine/World/Controller/PlayerController.h
         src/World/Actor.cpp
-        src/World/PlayerController.cpp
+        src/World/Controller/PlayerController.cpp
         include/Engine/View/Window.h
         include/Engine/View/Camera.h
         include/Engine/View/RenderHandle.h
