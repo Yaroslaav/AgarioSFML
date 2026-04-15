@@ -1,5 +1,6 @@
 #pragma once
 #include "Actor.h"
+#include <SFML/Graphics/Rect.hpp>
 
 namespace Engine
 {
@@ -25,14 +26,20 @@ namespace Engine
         void Render(Application& app) const;
         void SetActiveCamera(Camera* camera);
         [[nodiscard]] Camera* GetActiveCamera() const;
+        void SetBounds(const sf::FloatRect& bounds);
+        [[nodiscard]] const sf::FloatRect& GetBounds() const;
+        [[nodiscard]] bool HasBounds() const;
 
 
     private:
         std::vector<std::unique_ptr<Actor>> m_actors;
         std::vector<std::unique_ptr<Actor>> m_pendingActors;
         Camera* m_activeCamera = nullptr;
+        sf::FloatRect m_bounds{};
+        bool m_hasBounds = false;
 
         void FlushPendingActors();
         void SyncActiveCamera(Application& app) const;
+        void ConstrainActorsToBounds() const;
     };
 }

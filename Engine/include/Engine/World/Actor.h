@@ -2,6 +2,7 @@
 #include "Engine/Components/ActorComponent.h"
 #include "Engine/Components/TransformComponent.h"
 
+#include <SFML/Graphics/Rect.hpp>
 #include <memory>
 #include <type_traits>
 #include <utility>
@@ -23,6 +24,7 @@ namespace Engine
 
         virtual void Tick(Application& app, float deltaTime);
         virtual void Render(Application& app);
+        virtual void ConstrainToWorldBounds(const sf::FloatRect& bounds);
 
         [[nodiscard]] bool IsActive() const
         {

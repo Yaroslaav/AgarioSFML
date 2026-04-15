@@ -45,4 +45,8 @@ namespace Engine
     void Actor::Render(Application& app)
     {
     }
+
+    void Actor::ConstrainToWorldBounds(const sf::FloatRect& bounds)
+    {
+    }
 }

@@ -38,6 +38,7 @@ namespace Engine
             actor->Tick(app, deltaTime);
         }
 
+        ConstrainActorsToBounds();
         SyncActiveCamera(app);
     }
 
@@ -87,5 +88,34 @@ namespace Engine
         }
 
         app.GetWindow().SetCamera(*m_activeCamera);
+    }
+
+    void World::SetBounds(const sf::FloatRect& bounds)
+    {
+        m_bounds = bounds;
+        m_hasBounds = true;
+    }
+
+    const sf::FloatRect& World::GetBounds() const
+    {
+        return m_bounds;
+    }
+
+    bool World::HasBounds() const
+    {
+        return m_hasBounds;
+    }
+
+    void World::ConstrainActorsToBounds() const
+    {
+        if (!m_hasBounds)
+        {
+            return;
+        }
+
+        for (const auto& actor : m_actors)
+        {
+            actor->ConstrainToWorldBounds(m_bounds);
+        }
     }
 }
