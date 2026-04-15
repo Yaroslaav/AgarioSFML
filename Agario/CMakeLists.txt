@@ -3,7 +3,7 @@ add_executable(Agario
         src/Game.cpp
         src/World/PlayerActor.cpp
         src/World/CenterMarkerActor.cpp
-        include/Agario/World/PlayerActor.h
+        include/Agario/World/Player/PlayerActor.h
         include/Agario/World/CenterMarkerActor.h
         include/Agario/GameplayTags/GameTags.h
 )

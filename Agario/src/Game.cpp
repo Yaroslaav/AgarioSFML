@@ -1,9 +1,10 @@
 #include "Agario/Game.h"
 
 #include "Agario/World/CenterMarkerActor.h"
-#include "Agario/World/PlayerActor.h"
+#include "Agario/World/Player/PlayerActor.h"
 #include "Engine/Core/Application.h"
 #include "Engine/View/Camera.h"
+#include "../../Engine/include/Engine/World/Controller/PlayerController.h"
 
 #include <optional>
 
@@ -13,6 +14,8 @@ namespace Agario
     {
         auto* player = m_world.SpawnActor<PlayerActor>();
         m_world.SpawnActor<CenterMarkerActor>();
+        auto* playerController = m_world.SpawnActor<Engine::PlayerController>();
+        playerController->Possess(*player);
         auto* camera = m_world.SpawnActor<Engine::Camera>(
             sf::Vector2f(640.f, 360.f),
             static_cast<sf::Vector2f>(app.GetWindow().GetSize()));

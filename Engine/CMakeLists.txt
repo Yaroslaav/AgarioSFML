@@ -10,7 +10,10 @@ add_library(Engine STATIC
         include/Engine/Components/ActorComponent.h
         include/Engine/Components/TransformComponent.h
         include/Engine/World/Actor.h
+        include/Engine/World/Controller/Controller.h
+        include/Engine/World/Controller/PlayerController.h
         src/World/Actor.cpp
+        src/World/PlayerController.cpp
         include/Engine/View/Window.h
         include/Engine/View/Camera.h
         include/Engine/View/RenderHandle.h

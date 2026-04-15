@@ -11,11 +11,9 @@ namespace Agario
     public:
         PlayerActor();
 
-        void Tick(Engine::Application& app, float deltaTime) override;
         void Render(Engine::Application& app) override;
 
     private:
         sf::CircleShape m_shape;
-        float m_speed = 250.f;
     };
 }
