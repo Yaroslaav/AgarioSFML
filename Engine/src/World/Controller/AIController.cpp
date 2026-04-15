@@ -7,6 +7,11 @@
 
 namespace Engine
 {
+    namespace
+    {
+        constexpr float FullRotationRadians = 6.28318530718f;
+    }
+
     void AIController::Tick(Application& app, const float deltaTime)
     {
         Controller::Tick(app, deltaTime);
@@ -44,7 +49,7 @@ namespace Engine
     void AIController::PickNewTarget(const sf::Vector2f& center)
     {
         static std::mt19937 rng{std::random_device{}()};
-        std::uniform_real_distribution<float> angleDistribution(0.f, M_PI * 2);
+        std::uniform_real_distribution<float> angleDistribution(0.f, FullRotationRadians);
         std::uniform_real_distribution<float> radiusDistribution(0.f, m_roamingRadius);
 
         const float angle = angleDistribution(rng);

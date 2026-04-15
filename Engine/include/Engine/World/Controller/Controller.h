@@ -2,6 +2,8 @@
 
 #include "Engine/World/Actor.h"
 
+#include <SFML/System/Vector2.hpp>
+
 namespace Engine
 {
     class Controller : public Actor

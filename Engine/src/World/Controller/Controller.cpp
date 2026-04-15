@@ -1,5 +1,7 @@
 #include "Engine/World/Controller/Controller.h"
 
+#include <cmath>
+
 namespace Engine
 {
     sf::Vector2f Controller::NormalizeOrZero(const sf::Vector2f vector)
