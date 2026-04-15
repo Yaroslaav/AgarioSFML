@@ -8,7 +8,9 @@ add_library(Engine STATIC
         include/Engine/GameplayTags/GameplayTagContainer.h
         src/GameplayTags/GameplayTagContainer.cpp
         include/Engine/Components/ActorComponent.h
+        include/Engine/Components/MovementComponent.h
         include/Engine/Components/TransformComponent.h
+        src/Components/MovementComponent.cpp
         include/Engine/World/Actor.h
         include/Engine/World/Controller/Controller.h
         include/Engine/World/Controller/PlayerController.h

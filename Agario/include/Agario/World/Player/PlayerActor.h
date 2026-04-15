@@ -12,7 +12,6 @@ namespace Agario
         PlayerActor();
 
         void Render(Engine::Application& app) override;
-
     private:
         sf::CircleShape m_shape;
     };
