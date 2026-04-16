@@ -18,6 +18,7 @@ namespace Agario
         void Render(Engine::Application& app) override;
         void ConstrainToWorldBounds(const sf::FloatRect& bounds) override;
         [[nodiscard]] float GetRadius() const;
+        void SetRadius(float radius);
         [[nodiscard]] Engine::SphereCollisionComponent* GetCollision() const;
 
     protected:

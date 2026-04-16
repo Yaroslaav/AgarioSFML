@@ -75,12 +75,13 @@ namespace Agario
 
         for (auto* player : players)
         {
-            Engine::SphereCollisionComponent* playerCollision = player->GetComponent<Engine::SphereCollisionComponent>();
+            auto* playerCollision = player->GetComponent<Engine::SphereCollisionComponent>();
             for (auto* foodCell : food)
             {
-                Engine::SphereCollisionComponent* foodCellCollision = foodCell->GetComponent<Engine::SphereCollisionComponent>();
+                auto* foodCellCollision = foodCell->GetComponent<Engine::SphereCollisionComponent>();
                 if (playerCollision->FullyCovers(*foodCellCollision))
                 {
+                    player->Grow(foodCell->GetMass());
                     foodCell->GetTransform().SetPosition(m_world.GetRandomPositionInBounds(foodCell->GetRadius()));
                     foodCell->GetCollision()->OnBeginOverlap.Broadcast(player, playerCollision);
                     player->GetCollision()->OnBeginOverlap.Broadcast(foodCell, foodCellCollision);

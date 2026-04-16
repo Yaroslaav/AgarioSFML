@@ -43,6 +43,13 @@ namespace Agario
         return m_shape.getRadius();
     }
 
+    void CircleActor::SetRadius(const float radius)
+    {
+        m_shape.setRadius(radius);
+        m_shape.setOrigin({radius, radius});
+        m_collision->SetRadius(radius);
+    }
+
     Engine::SphereCollisionComponent* CircleActor::GetCollision() const
     {
         return m_collision;
