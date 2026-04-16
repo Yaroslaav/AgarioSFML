@@ -20,37 +20,19 @@ namespace Engine
 
         if (!m_wasPressed && m_isPressed)
         {
-            for (auto& cb : m_OnPressedOnce)
-                cb();
+            OnPressedOnce.Broadcast();
         }
 
         if (m_isPressed)
         {
-            for (auto& cb : m_OnHeld)
-                cb();
+            OnHeld.Broadcast();
         }
 
         if (m_wasPressed && !m_isPressed)
         {
-            for (auto& cb : m_OnReleased)
-                cb();
+            OnReleased.Broadcast();
         }
 
         m_wasPressed = m_isPressed;
-    }
-
-    void BindKey::AssignOnKeyPressedOnce(std::function<void()> callback)
-    {
-        m_OnPressedOnce.push_back(std::move(callback));
-    }
-
-    void BindKey::AssignOnKeyHeld(std::function<void()> callback)
-    {
-        m_OnHeld.push_back(std::move(callback));
-    }
-
-    void BindKey::AssignOnKeyReleased(std::function<void()> callback)
-    {
-        m_OnReleased.push_back(std::move(callback));
     }
 }

@@ -33,6 +33,7 @@ add_library(Engine STATIC
         include/Engine/GameplayTags/GameTags.h
         include/Engine/World/World.h
         src/World/World.cpp
+        include/Engine/Helpers/Event.h
 )
 
 target_include_directories(Engine PUBLIC

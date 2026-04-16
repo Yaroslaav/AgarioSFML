@@ -49,6 +49,6 @@ namespace Engine
             return;
         }
 
-        m_view.setCenter(GetTransform().GetPosition());
+        m_view.setCenter(GetActorPosition());
     }
 }

@@ -22,7 +22,7 @@ namespace Engine
 
         sf::Vector2f GetCenter() const
         {
-            return GetTransform().GetPosition();
+            return GetActorPosition();
         }
         sf::Vector2f GetSize() const
         {

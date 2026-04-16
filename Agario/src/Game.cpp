@@ -7,7 +7,6 @@
 #include "Engine/World/Controller/AIController.h"
 #include "Engine/World/Controller/PlayerController.h"
 
-#include <random>
 #include <optional>
 
 namespace Agario
@@ -19,16 +18,10 @@ namespace Agario
 
         auto* playerCell = m_world.SpawnActor<Cell>(30.f, sf::Color::White, sf::Vector2f(640.f, 360.f));
         auto* botCell = m_world.SpawnActor<Cell>(24.f, sf::Color(120, 220, 120), sf::Vector2f(860.f, 360.f), 180.f);
-        
-        std::mt19937 rng{std::random_device{}()};
-        std::uniform_real_distribution<float> xDistribution(worldBounds.position.x + 12.f,
-                                                            worldBounds.position.x + worldBounds.size.x - 12.f);
-        std::uniform_real_distribution<float> yDistribution(worldBounds.position.y + 12.f,
-                                                            worldBounds.position.y + worldBounds.size.y - 12.f);
 
         for (int i = 0; i < 200; ++i)
         {
-            m_world.SpawnActor<Food>(sf::Vector2f{xDistribution(rng), yDistribution(rng)});
+            m_world.SpawnActor<Food>(m_world.GetRandomPositionInBounds(12.f));
         }
 
         auto* playerController = m_world.SpawnActor<Engine::PlayerController>();
@@ -61,6 +54,8 @@ namespace Agario
     void Game::OnUpdate(Engine::Application& app, const float deltaTime)
     {
         m_world.Tick(app, deltaTime);
+
+        CheckCollision();
     }
 
     void Game::OnRender(Engine::Application& app)
@@ -71,5 +66,26 @@ namespace Agario
     void Game::OnShutdown(Engine::Application& app)
     {
         m_world.EndPlay();
+    }
+
+    void Game::CheckCollision()
+    {
+        const auto& players = m_world.GetAllActorsOfClass<Cell>();
+        const auto& food = m_world.GetAllActorsOfClass<Food>();
+
+        for (auto* player : players)
+        {
+            Engine::SphereCollisionComponent* playerCollision = player->GetComponent<Engine::SphereCollisionComponent>();
+            for (auto* foodCell : food)
+            {
+                Engine::SphereCollisionComponent* foodCellCollision = foodCell->GetComponent<Engine::SphereCollisionComponent>();
+                if (playerCollision->FullyCovers(*foodCellCollision))
+                {
+                    foodCell->GetTransform().SetPosition(m_world.GetRandomPositionInBounds(foodCell->GetRadius()));
+                    foodCell->GetCollision()->OnBeginOverlap.Broadcast(player, playerCollision);
+                    player->GetCollision()->OnBeginOverlap.Broadcast(foodCell, foodCellCollision);
+                }
+            }
+        }
     }
 }

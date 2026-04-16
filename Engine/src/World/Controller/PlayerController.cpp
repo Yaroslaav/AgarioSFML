@@ -22,10 +22,9 @@ namespace Engine
             return;
         }
 
-        const auto& transform = pawn->GetTransform();
         const sf::Vector2f cursorPosition = app.GetWindow().GetMouseWorldPosition();
 
-        if (const sf::Vector2f dir = cursorPosition - transform.GetPosition();
+        if (const sf::Vector2f dir = cursorPosition - pawn->GetActorPosition();
             dir.x != 0.f || dir.y != 0.f)
         {
             movementComponent->AddInputVector(NormalizeOrZero(dir));

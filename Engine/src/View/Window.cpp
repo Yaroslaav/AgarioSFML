@@ -19,7 +19,7 @@ namespace Engine
     void Window::Init(Application &app)
     {
         BindKey& screenModeToggle =  app.GetInput().AddNewBind(sf::Keyboard::Key::F11, Tags::Engine::Input_ScreenMode_Toggle);
-        screenModeToggle.AssignOnKeyPressedOnce([this] { ToggleFullScreen(); });
+        screenModeToggle.OnPressedOnce.AddListener([this]() { ToggleFullScreen(); });
     }
 
     bool Window::IsOpen() const

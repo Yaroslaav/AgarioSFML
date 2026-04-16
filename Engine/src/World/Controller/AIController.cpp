@@ -29,7 +29,7 @@ namespace Engine
             return;
         }
 
-        const sf::Vector2f pawnPosition = pawn->GetTransform().GetPosition();
+        const sf::Vector2f pawnPosition = pawn->GetActorPosition();
 
         m_retargetTimer -= deltaTime;
         if (!m_hasTarget || m_retargetTimer <= 0.f)

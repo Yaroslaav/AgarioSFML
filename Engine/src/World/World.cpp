@@ -3,6 +3,8 @@
 #include "Engine/Core/Application.h"
 #include "Engine/View/Camera.h"
 
+#include <algorithm>
+
 namespace Engine
 {
     void World::BeginPlay(Application& app)
@@ -26,6 +28,7 @@ namespace Engine
 
         m_pendingActors.clear();
         m_actors.clear();
+        m_actorBuckets.clear();
         m_activeCamera = nullptr;
     }
 
@@ -104,6 +107,26 @@ namespace Engine
     bool World::HasBounds() const
     {
         return m_hasBounds;
+    }
+
+    sf::Vector2f World::GetRandomPositionInBounds(const float padding)
+    {
+        if (!m_hasBounds)
+        {
+            return {};
+        }
+
+        const float clampedPaddingX = std::min(padding, m_bounds.size.x * 0.5f);
+        const float clampedPaddingY = std::min(padding, m_bounds.size.y * 0.5f);
+
+        std::uniform_real_distribution<float> xDistribution(
+            m_bounds.position.x + clampedPaddingX,
+            m_bounds.position.x + m_bounds.size.x - clampedPaddingX);
+        std::uniform_real_distribution<float> yDistribution(
+            m_bounds.position.y + clampedPaddingY,
+            m_bounds.position.y + m_bounds.size.y - clampedPaddingY);
+
+        return {xDistribution(m_randomEngine), yDistribution(m_randomEngine)};
     }
 
     void World::ConstrainActorsToBounds() const

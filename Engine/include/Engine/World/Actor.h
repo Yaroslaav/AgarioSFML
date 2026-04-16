@@ -4,6 +4,7 @@
 
 #include <SFML/Graphics/Rect.hpp>
 #include <memory>
+#include <typeindex>
 #include <type_traits>
 #include <utility>
 #include <vector>
@@ -66,6 +67,16 @@ namespace Engine
                 }
             }
             return nullptr;
+        }
+
+        [[nodiscard]] std::type_index GetType()
+        {
+            return typeid(*this);
+        }
+
+        [[nodiscard]] const sf::Vector2f& GetActorPosition() const
+        {
+            return GetTransform().GetPosition();
         }
 
         [[nodiscard]] TransformComponent& GetTransform()

@@ -14,6 +14,8 @@ namespace Agario
         void OnRender(Engine::Application& app) override;
         void OnShutdown(Engine::Application& app) override;
 
+        void CheckCollision();
+
     private:
         Engine::World m_world;
     };
