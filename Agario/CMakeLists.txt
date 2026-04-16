@@ -1,8 +1,10 @@
 add_executable(Agario
         src/main.cpp
         src/Game.cpp
+        src/Components/MassComponent.cpp
         src/World/CircleActor.cpp
         src/World/Cell.cpp
+        include/Agario/Component/MassComponent.h
         include/Agario/World/CircleActor.h
         include/Agario/World/Cell.h
         include/Agario/GameplayTags/GameTags.h

@@ -19,7 +19,7 @@ namespace Agario
         auto* playerCell = m_world.SpawnActor<Cell>(30.f, sf::Color::White, sf::Vector2f(640.f, 360.f));
         auto* botCell = m_world.SpawnActor<Cell>(24.f, sf::Color(120, 220, 120), sf::Vector2f(860.f, 360.f), 180.f);
 
-        for (int i = 0; i < 200; ++i)
+        for (int i = 0; i < 2000; ++i)
         {
             m_world.SpawnActor<Food>(m_world.GetRandomPositionInBounds(12.f));
         }
@@ -73,19 +73,52 @@ namespace Agario
         const auto& players = m_world.GetAllActorsOfClass<Cell>();
         const auto& food = m_world.GetAllActorsOfClass<Food>();
 
-        for (auto* player : players)
+        for (std::size_t playerIndex = 0; playerIndex < players.size(); ++playerIndex)
         {
-            auto* playerCollision = player->GetComponent<Engine::SphereCollisionComponent>();
+            Cell* player = players[playerIndex];
+            auto* playerCollision = player->GetCollision();
+
             for (auto* foodCell : food)
             {
-                auto* foodCellCollision = foodCell->GetComponent<Engine::SphereCollisionComponent>();
+                auto* foodCellCollision = foodCell->GetCollision();
                 if (playerCollision->FullyCovers(*foodCellCollision))
                 {
                     player->Grow(foodCell->GetMass());
                     foodCell->GetTransform().SetPosition(m_world.GetRandomPositionInBounds(foodCell->GetRadius()));
-                    foodCell->GetCollision()->OnBeginOverlap.Broadcast(player, playerCollision);
-                    player->GetCollision()->OnBeginOverlap.Broadcast(foodCell, foodCellCollision);
+                    foodCellCollision->OnBeginOverlap.Broadcast(player, playerCollision);
+                    playerCollision->OnBeginOverlap.Broadcast(foodCell, foodCellCollision);
                 }
+            }
+
+            for (std::size_t otherPlayerIndex = playerIndex + 1; otherPlayerIndex < players.size(); ++otherPlayerIndex)
+            {
+                Cell* otherPlayer = players[otherPlayerIndex];
+                Cell* largerPlayer = player;
+                Cell* smallerPlayer = otherPlayer;
+
+                if (otherPlayer->GetMass() > player->GetMass())
+                {
+                    largerPlayer = otherPlayer;
+                    smallerPlayer = player;
+                }
+
+                if (!largerPlayer->CanConsume(*smallerPlayer))
+                {
+                    continue;
+                }
+
+                auto* largerCollision = largerPlayer->GetCollision();
+                auto* smallerCollision = smallerPlayer->GetCollision();
+                if (!largerCollision->FullyCovers(*smallerCollision))
+                {
+                    continue;
+                }
+
+                largerPlayer->Grow(smallerPlayer->GetMass());
+                smallerPlayer->GetTransform().SetPosition(m_world.GetRandomPositionInBounds(smallerPlayer->GetRadius()));
+                smallerPlayer->ResetMass();
+                smallerCollision->OnBeginOverlap.Broadcast(largerPlayer, largerCollision);
+                largerCollision->OnBeginOverlap.Broadcast(smallerPlayer, smallerCollision);
             }
         }
     }
