@@ -1,5 +1,6 @@
 #include "Agario/Game.h"
 
+#include "Agario/Config/Settings.h"
 #include "Agario/World/Cell.h"
 #include "Agario/World/Food.h"
 #include "Engine/Core/Application.h"
@@ -13,25 +14,38 @@ namespace Agario
 {
     void Game::OnInit(Engine::Application& app)
     {
-        const sf::FloatRect worldBounds{{0.f, 0.f}, {2000.f, 2000.f}};
-        m_world.SetBounds(worldBounds);
+        m_world.SetBounds(Settings.world.bounds);
 
-        auto* playerCell = m_world.SpawnActor<Cell>(30.f, sf::Color::White, sf::Vector2f(640.f, 360.f));
-        auto* botCell = m_world.SpawnActor<Cell>(24.f, sf::Color(120, 220, 120), sf::Vector2f(860.f, 360.f), 180.f);
+        auto* playerCell = m_world.SpawnActor<Cell>(
+            Settings.player,
+            Settings.player.spawnPosition,
+            Settings.gameplay.consume.thresholdRatio);
 
-        for (int i = 0; i < 2000; ++i)
+        for (int i = 0; i < Settings.bots.count; ++i)
         {
-            m_world.SpawnActor<Food>(m_world.GetRandomPositionInBounds(12.f));
+            auto* botCell = m_world.SpawnActor<Cell>(
+                Settings.bots,
+                m_world.GetRandomPositionInBounds(Settings.bots.spawnPadding),
+                Settings.gameplay.consume.thresholdRatio);
+
+            auto* aiController = m_world.SpawnActor<Engine::AIController>();
+            aiController->SetRoamingRadius(Settings.bots.ai.roamingRadius);
+            aiController->SetRetargetInterval(Settings.bots.ai.retargetInterval);
+            aiController->SetAcceptableRadius(Settings.bots.ai.acceptableRadius);
+            aiController->Possess(*botCell);
+        }
+
+        for (int i = 0; i < Settings.food.count; ++i)
+        {
+            m_world.SpawnActor<Food>(
+                Settings.food,
+                m_world.GetRandomPositionInBounds(Settings.food.spawnPadding));
         }
 
         auto* playerController = m_world.SpawnActor<Engine::PlayerController>();
         playerController->Possess(*playerCell);
-
-        auto* aiController = m_world.SpawnActor<Engine::AIController>();
-        aiController->Possess(*botCell);
-
         auto* camera = m_world.SpawnActor<Engine::Camera>(
-            sf::Vector2f(640.f, 360.f),
+            Settings.player.spawnPosition,
             static_cast<sf::Vector2f>(app.GetWindow().GetSize()));
         camera->SetFocusActor(*playerCell);
         m_world.SetActiveCamera(camera);
@@ -114,7 +128,7 @@ namespace Agario
                     continue;
                 }
 
-                largerPlayer->Grow(smallerPlayer->GetMass());
+                largerPlayer->Grow(smallerPlayer->GetMass() * Settings.gameplay.consume.massGainFactor);
                 smallerPlayer->GetTransform().SetPosition(m_world.GetRandomPositionInBounds(smallerPlayer->GetRadius()));
                 smallerPlayer->ResetMass();
                 smallerCollision->OnBeginOverlap.Broadcast(largerPlayer, largerCollision);

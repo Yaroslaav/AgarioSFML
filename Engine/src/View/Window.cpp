@@ -5,20 +5,36 @@
 
 namespace Engine
 {
-    Window::Window(unsigned int width, unsigned int height, const std::string &title, const unsigned int frameRate) :
-    m_frameRate(frameRate),
-    m_title(title),
-    m_renderWindow(sf::VideoMode({width, height}), title),
-    m_defaultCamera(sf::Vector2f(static_cast<float>(width) * 0.5f, static_cast<float>(height) * 0.5f),
-                    sf::Vector2f(width, height))
+    Window::Window(
+        const unsigned int width,
+        const unsigned int height,
+        const std::string& title,
+        const unsigned int frameRate,
+        const sf::Keyboard::Key fullscreenToggleKey,
+        const bool startFullscreen) :
+        m_frameRate(frameRate),
+        m_title(title),
+        m_renderWindow(sf::VideoMode({width, height}), title),
+        m_defaultCamera(
+            sf::Vector2f(static_cast<float>(width) * 0.5f, static_cast<float>(height) * 0.5f),
+            sf::Vector2f(width, height)),
+        m_fullscreenToggleKey(fullscreenToggleKey),
+        m_isFullscreen(startFullscreen),
+        m_windowedSize(width, height)
     {
+        if (m_isFullscreen)
+        {
+            m_renderWindow.create(sf::VideoMode::getDesktopMode(), m_title, sf::Style::None);
+            m_defaultCamera.SetSize(static_cast<sf::Vector2f>(m_renderWindow.getSize()));
+        }
+
         m_renderWindow.setView(m_defaultCamera.GetView());
         m_renderWindow.setFramerateLimit(m_frameRate);
     }
 
     void Window::Init(Application &app)
     {
-        BindKey& screenModeToggle =  app.GetInput().AddNewBind(sf::Keyboard::Key::F11, Tags::Engine::Input_ScreenMode_Toggle);
+        BindKey& screenModeToggle = app.GetInput().AddNewBind(m_fullscreenToggleKey, Tags::Engine::Input_ScreenMode_Toggle);
         screenModeToggle.OnPressedOnce.AddListener([this]() { ToggleFullScreen(); });
     }
 

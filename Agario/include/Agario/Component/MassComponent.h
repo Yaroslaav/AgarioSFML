@@ -9,7 +9,7 @@ namespace Agario
     class MassComponent : public Engine::ActorComponent
     {
     public:
-        explicit MassComponent(float startMass, float initialRadius, float consumeThresholdRatio = 0.8f);
+        explicit MassComponent(float startMass, float initialRadius, float consumeThresholdRatio);
 
         void BeginPlay(Engine::Application& app) override;
 

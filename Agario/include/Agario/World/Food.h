@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Agario/Config/Settings.h"
 #include "Agario/World/CircleActor.h"
 
 namespace Agario
@@ -7,7 +8,7 @@ namespace Agario
     class Food final : public CircleActor
     {
     public:
-        explicit Food(const sf::Vector2f& startPosition, float mass = 1.f);
+        explicit Food(const FoodSettings& settings, const sf::Vector2f& startPosition);
 
         [[nodiscard]] float GetMass() const
         {

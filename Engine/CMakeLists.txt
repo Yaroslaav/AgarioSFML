@@ -1,5 +1,6 @@
 add_library(Engine STATIC
         src/Core/Application.cpp
+        include/Engine/Config/Settings.h
         include/Engine/Input/InputManager.h
         include/Engine/Input/BindKey.h
         src/Input/BindKey.cpp

@@ -2,9 +2,9 @@
 
 namespace Agario
 {
-    Food::Food(const sf::Vector2f& startPosition, const float mass)
-        : CircleActor(2.f, sf::Color(255, 210, 70), startPosition),
-          m_mass(mass)
+    Food::Food(const FoodSettings& settings, const sf::Vector2f& startPosition)
+        : CircleActor(settings.radius, settings.color, startPosition),
+          m_mass(settings.mass)
     {
     }
 }

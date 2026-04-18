@@ -3,6 +3,7 @@
 #include <string>
 
 #include "Camera.h"
+#include "SFML/Window/Keyboard.hpp"
 #include "SFML/Graphics/Color.hpp"
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "SFML/Window/Event.hpp"
@@ -14,7 +15,13 @@ namespace Engine
     class Window
     {
     public:
-        Window(unsigned int width, unsigned int height, const std::string &title, unsigned int frameRate);
+        Window(
+            unsigned int width,
+            unsigned int height,
+            const std::string& title,
+            unsigned int frameRate,
+            sf::Keyboard::Key fullscreenToggleKey = sf::Keyboard::Key::F11,
+            bool startFullscreen = false);
 
         void Init(Application &app);
         [[nodiscard]] bool IsOpen() const;
@@ -53,6 +60,7 @@ namespace Engine
         sf::RenderWindow m_renderWindow;
         Camera m_defaultCamera;
         Camera* m_activeCamera = nullptr;
+        sf::Keyboard::Key m_fullscreenToggleKey = sf::Keyboard::Key::F11;
 
         bool m_isFullscreen = false;
         sf::Vector2u m_windowedSize = {1280, 720};

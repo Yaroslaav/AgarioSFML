@@ -1,0 +1,35 @@
+#pragma once
+
+#include <string>
+
+#include <SFML/Graphics/Color.hpp>
+#include <SFML/Window/Keyboard.hpp>
+
+namespace Engine
+{
+    struct WindowSettings
+    {
+        unsigned int width = 1280;
+        unsigned int height = 720;
+        bool startFullscreen = false;
+        std::string title = "Application";
+    };
+
+    struct RenderSettings
+    {
+        unsigned int frameRateLimit = 144;
+        sf::Color clearColor = sf::Color::Black;
+    };
+
+    struct InputSettings
+    {
+        sf::Keyboard::Key fullscreenToggleKey = sf::Keyboard::Key::F11;
+    };
+
+    struct AppSettings
+    {
+        WindowSettings window;
+        RenderSettings render;
+        InputSettings input;
+    };
+}

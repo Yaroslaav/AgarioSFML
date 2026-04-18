@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "Engine/Config/Settings.h"
 #include "Engine/Input/InputManager.h"
 #include "Engine/View/RenderSystem.h"
 #include "Engine/View/Window.h"
@@ -13,7 +14,15 @@ namespace Engine
     class Application
     {
     public:
-        Application(unsigned int width, unsigned int height, const std::string& title);
+        explicit Application(const AppSettings& settings);
+        Application(
+            unsigned int width,
+            unsigned int height,
+            const std::string& title,
+            unsigned int frameRate = 144,
+            sf::Color clearColor = sf::Color::Black,
+            sf::Keyboard::Key fullscreenToggleKey = sf::Keyboard::Key::F11,
+            bool startFullscreen = false);
 
         void Run(IGame& game);
         void Close();
@@ -43,5 +52,6 @@ namespace Engine
         Window m_window;
         InputManager m_input;
         RenderSystem m_renderSystem;
+        sf::Color m_clearColor = sf::Color::Black;
     };
 }

@@ -6,8 +6,28 @@
 
 namespace Engine
 {
-    Application::Application(const unsigned int width, const unsigned int height, const std::string& title)
-        : m_window(width, height, title, 144)
+    Application::Application(const AppSettings& settings)
+        : Application(
+            settings.window.width,
+            settings.window.height,
+            settings.window.title,
+            settings.render.frameRateLimit,
+            settings.render.clearColor,
+            settings.input.fullscreenToggleKey,
+            settings.window.startFullscreen)
+    {
+    }
+
+    Application::Application(
+        const unsigned int width,
+        const unsigned int height,
+        const std::string& title,
+        const unsigned int frameRate,
+        const sf::Color clearColor,
+        const sf::Keyboard::Key fullscreenToggleKey,
+        const bool startFullscreen)
+        : m_window(width, height, title, frameRate, fullscreenToggleKey, startFullscreen),
+          m_clearColor(clearColor)
     {
         m_window.Init(*this);
     }
@@ -27,7 +47,7 @@ namespace Engine
             game.OnEvent(*this);
             game.OnUpdate(*this, deltaTime);
 
-            m_window.Clear(sf::Color::Black);
+            m_window.Clear(m_clearColor);
             m_renderSystem.DrawAll(m_window);
             game.OnRender(*this);
             m_window.Display();

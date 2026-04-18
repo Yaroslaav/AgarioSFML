@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Agario/Component/MassComponent.h"
+#include "Agario/Config/Settings.h"
 #include "Agario/World/CircleActor.h"
 
 namespace Agario
@@ -8,7 +9,9 @@ namespace Agario
     class Cell : public CircleActor
     {
     public:
-        Cell(float radius, const sf::Color& color, const sf::Vector2f& startPosition, float maxSpeed = 250.f, float startMass = 5);
+        Cell(float radius, const sf::Color& color, const sf::Vector2f& startPosition, float maxSpeed, float startMass, float consumeThresholdRatio);
+        Cell(const PlayerSettings& settings, const sf::Vector2f& startPosition, float consumeThresholdRatio);
+        Cell(const BotSettings& settings, const sf::Vector2f& startPosition, float consumeThresholdRatio);
 
         void Grow(float amount);
         [[nodiscard]] float GetMass() const

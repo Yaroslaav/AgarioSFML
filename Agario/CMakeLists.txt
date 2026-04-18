@@ -4,6 +4,7 @@ add_executable(Agario
         src/Components/MassComponent.cpp
         src/World/CircleActor.cpp
         src/World/Cell.cpp
+        include/Agario/Config/Settings.h
         include/Agario/Component/MassComponent.h
         include/Agario/World/CircleActor.h
         include/Agario/World/Cell.h
