@@ -14,6 +14,10 @@ namespace Engine
             settings.render.frameRateLimit,
             settings.render.clearColor,
             settings.input.fullscreenToggleKey,
+            settings.input.zoomInKey,
+            settings.input.zoomOutKey,
+            settings.input.zoomInFactor,
+            settings.input.zoomOutFactor,
             settings.window.startFullscreen)
     {
     }
@@ -25,8 +29,22 @@ namespace Engine
         const unsigned int frameRate,
         const sf::Color clearColor,
         const sf::Keyboard::Key fullscreenToggleKey,
+        const sf::Keyboard::Key zoomInKey,
+        const sf::Keyboard::Key zoomOutKey,
+        const float zoomInFactor,
+        const float zoomOutFactor,
         const bool startFullscreen)
-        : m_window(width, height, title, frameRate, fullscreenToggleKey, startFullscreen),
+        : m_window(
+            width,
+            height,
+            title,
+            frameRate,
+            fullscreenToggleKey,
+            zoomInKey,
+            zoomOutKey,
+            zoomInFactor,
+            zoomOutFactor,
+            startFullscreen),
           m_clearColor(clearColor)
     {
         m_window.Init(*this);

@@ -3,6 +3,7 @@
 #include <cmath>
 
 #include "Engine/Core/Application.h"
+#include "Engine/Math/MathUtils.h"
 
 namespace Engine
 {
@@ -27,7 +28,7 @@ namespace Engine
         if (const sf::Vector2f dir = cursorPosition - pawn->GetActorPosition();
             dir.x != 0.f || dir.y != 0.f)
         {
-            movementComponent->AddInputVector(NormalizeOrZero(dir));
+            movementComponent->AddInputVector(Math::NormalizeOrZero(dir));
         }
     }
 }

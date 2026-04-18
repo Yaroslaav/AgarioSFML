@@ -57,12 +57,22 @@ namespace Agario
 
     struct WorldSettings
     {
-        sf::FloatRect bounds{{0.f, 0.f}, {2000.f, 2000.f}};
+        sf::FloatRect bounds{{0.f, 0.f}, {4000.f, 4000.f}};
+    };
+
+    struct ChunkSettings
+    {
+        int columns = 50;
+        int rows = 50;
+        sf::Color gridColor{80, 80, 80, 120};
+        float dummyFoodMassPerFood = 1.f;
+        float dummyEnemyMassPerCell = 1.f;
     };
 
     struct GameSettings : Engine::AppSettings
     {
         WorldSettings world;
+        ChunkSettings chunks;
         PlayerSettings player;
         BotSettings bots;
         FoodSettings food;

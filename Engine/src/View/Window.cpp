@@ -11,6 +11,10 @@ namespace Engine
         const std::string& title,
         const unsigned int frameRate,
         const sf::Keyboard::Key fullscreenToggleKey,
+        const sf::Keyboard::Key zoomInKey,
+        const sf::Keyboard::Key zoomOutKey,
+        const float zoomInFactor,
+        const float zoomOutFactor,
         const bool startFullscreen) :
         m_frameRate(frameRate),
         m_title(title),
@@ -19,6 +23,10 @@ namespace Engine
             sf::Vector2f(static_cast<float>(width) * 0.5f, static_cast<float>(height) * 0.5f),
             sf::Vector2f(width, height)),
         m_fullscreenToggleKey(fullscreenToggleKey),
+        m_zoomInKey(zoomInKey),
+        m_zoomOutKey(zoomOutKey),
+        m_zoomInFactor(zoomInFactor),
+        m_zoomOutFactor(zoomOutFactor),
         m_isFullscreen(startFullscreen),
         m_windowedSize(width, height)
     {
@@ -34,8 +42,14 @@ namespace Engine
 
     void Window::Init(Application &app)
     {
-        BindKey& screenModeToggle = app.GetInput().AddNewBind(m_fullscreenToggleKey, Tags::Engine::Input_ScreenMode_Toggle);
-        screenModeToggle.OnPressedOnce.AddListener([this]() { ToggleFullScreen(); });
+        BindKey& screenModeToggleBind = app.GetInput().AddNewBind(m_fullscreenToggleKey, Tags::Engine::Input_ScreenMode_Toggle);
+        screenModeToggleBind.OnPressedOnce.AddListener([this]() { ToggleFullScreen(); });
+
+        BindKey& zoomInBind = app.GetInput().AddNewBind(m_zoomInKey, Tags::Engine::Input_Camera_ZoomIn);
+        zoomInBind.OnPressedOnce.AddListener([this]() { GetCurrentCamera().Zoom(m_zoomInFactor); });
+
+        BindKey& zoomOutBind = app.GetInput().AddNewBind(m_zoomOutKey, Tags::Engine::Input_Camera_ZoomOut);
+        zoomOutBind.OnPressedOnce.AddListener([this]() { GetCurrentCamera().Zoom(m_zoomOutFactor); });
     }
 
     bool Window::IsOpen() const

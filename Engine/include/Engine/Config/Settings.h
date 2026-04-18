@@ -24,6 +24,10 @@ namespace Engine
     struct InputSettings
     {
         sf::Keyboard::Key fullscreenToggleKey = sf::Keyboard::Key::F11;
+        sf::Keyboard::Key zoomInKey = sf::Keyboard::Key::Equal;
+        sf::Keyboard::Key zoomOutKey = sf::Keyboard::Key::Hyphen;
+        float zoomInFactor = 0.9f;
+        float zoomOutFactor = 1.1f;
     };
 
     struct AppSettings

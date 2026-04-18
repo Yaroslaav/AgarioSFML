@@ -22,6 +22,10 @@ namespace Engine
             unsigned int frameRate = 144,
             sf::Color clearColor = sf::Color::Black,
             sf::Keyboard::Key fullscreenToggleKey = sf::Keyboard::Key::F11,
+            sf::Keyboard::Key zoomInKey = sf::Keyboard::Key::Equal,
+            sf::Keyboard::Key zoomOutKey = sf::Keyboard::Key::Hyphen,
+            float zoomInFactor = 0.9f,
+            float zoomOutFactor = 1.1f,
             bool startFullscreen = false);
 
         void Run(IGame& game);

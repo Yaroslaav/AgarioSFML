@@ -2,8 +2,6 @@
 
 #include "Engine/World/Actor.h"
 
-#include <SFML/System/Vector2.hpp>
-
 namespace Engine
 {
     class Controller : public Actor
@@ -30,9 +28,6 @@ namespace Engine
             static_assert(std::is_base_of_v<Actor, T>, "T must derive from Actor");
             return dynamic_cast<T*>(m_pawn);
         }
-
-        static sf::Vector2f NormalizeOrZero(const sf::Vector2f vector);
-
     private:
         Actor* m_pawn = nullptr;
     };

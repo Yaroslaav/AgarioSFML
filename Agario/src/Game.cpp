@@ -10,13 +10,16 @@
 
 #include <optional>
 
+#include "Agario/World/CellAIController.h"
+
 namespace Agario
 {
     void Game::OnInit(Engine::Application& app)
     {
         m_world.SetBounds(Settings.world.bounds);
+        m_chunkGrid.Initialize(Settings.world.bounds, Settings.chunks);
 
-        auto* playerCell = m_world.SpawnActor<Cell>(
+        Cell* playerCell = m_world.SpawnActor<Cell>(
             Settings.player,
             Settings.player.spawnPosition,
             Settings.gameplay.consume.thresholdRatio);
@@ -28,11 +31,7 @@ namespace Agario
                 m_world.GetRandomPositionInBounds(Settings.bots.spawnPadding),
                 Settings.gameplay.consume.thresholdRatio);
 
-            auto* aiController = m_world.SpawnActor<Engine::AIController>();
-            aiController->SetRoamingRadius(Settings.bots.ai.roamingRadius);
-            aiController->SetRetargetInterval(Settings.bots.ai.retargetInterval);
-            aiController->SetAcceptableRadius(Settings.bots.ai.acceptableRadius);
-            aiController->Possess(*botCell);
+            m_world.SpawnActor<CellAIController>(Settings.bots, botCell);
         }
 
         for (int i = 0; i < Settings.food.count; ++i)
@@ -50,6 +49,7 @@ namespace Agario
         camera->SetFocusActor(*playerCell);
         m_world.SetActiveCamera(camera);
         m_world.BeginPlay(app);
+        UpdateChunkGrid();
     }
 
     void Game::OnEvent(Engine::Application& app)
@@ -70,10 +70,12 @@ namespace Agario
         m_world.Tick(app, deltaTime);
 
         CheckCollision();
+        UpdateChunkGrid();
     }
 
     void Game::OnRender(Engine::Application& app)
     {
+        m_chunkGrid.Draw(app.GetWindow());
         m_world.Render(app);
     }
 
@@ -133,6 +135,27 @@ namespace Agario
                 smallerPlayer->ResetMass();
                 smallerCollision->OnBeginOverlap.Broadcast(largerPlayer, largerCollision);
                 largerCollision->OnBeginOverlap.Broadcast(smallerPlayer, smallerCollision);
+            }
+        }
+    }
+
+    void Game::UpdateChunkGrid()
+    {
+        m_chunkGrid.ClearMass();
+
+        for (const Food* food : m_world.GetAllActorsOfClass<Food>())
+        {
+            if (food != nullptr && food->IsActive())
+            {
+                m_chunkGrid.AddFood(*food);
+            }
+        }
+
+        for (const Cell* cell : m_world.GetAllActorsOfClass<Cell>())
+        {
+            if (cell != nullptr && cell->IsActive())
+            {
+                m_chunkGrid.AddCell(*cell);
             }
         }
     }

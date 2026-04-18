@@ -16,4 +16,11 @@ namespace Tags::Agario
     TAG(State, "Agario.State")
     TAG(State_Alive, "Agario.State.Alive")
     TAG(State_Dead, "Agario.State.Dead")
+
+    TAG(AI, "Agario.AI")
+    TAG(AI_State, "Agario.AI.State")
+    TAG(AI_State_Deciding, "Agario.AI.State.Deciding")
+    TAG(AI_State_Roaming, "Agario.AI.State.Roaming")
+    TAG(AI_State_Chasing, "Agario.AI.State.Chasing")
+    TAG(AI_State_Fleeing, "Agario.AI.State.Fleeing")
 }

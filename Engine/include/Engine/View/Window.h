@@ -21,6 +21,10 @@ namespace Engine
             const std::string& title,
             unsigned int frameRate,
             sf::Keyboard::Key fullscreenToggleKey = sf::Keyboard::Key::F11,
+            sf::Keyboard::Key zoomInKey = sf::Keyboard::Key::Equal,
+            sf::Keyboard::Key zoomOutKey = sf::Keyboard::Key::Hyphen,
+            float zoomInFactor = 0.9f,
+            float zoomOutFactor = 1.1f,
             bool startFullscreen = false);
 
         void Init(Application &app);
@@ -61,6 +65,10 @@ namespace Engine
         Camera m_defaultCamera;
         Camera* m_activeCamera = nullptr;
         sf::Keyboard::Key m_fullscreenToggleKey = sf::Keyboard::Key::F11;
+        sf::Keyboard::Key m_zoomInKey = sf::Keyboard::Key::Equal;
+        sf::Keyboard::Key m_zoomOutKey = sf::Keyboard::Key::Hyphen;
+        float m_zoomInFactor = 0.9f;
+        float m_zoomOutFactor = 1.1f;
 
         bool m_isFullscreen = false;
         sf::Vector2u m_windowedSize = {1280, 720};
