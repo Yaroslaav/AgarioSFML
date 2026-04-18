@@ -26,6 +26,7 @@ namespace Engine
         virtual void Tick(Application& app, float deltaTime);
         virtual void Render(Application& app);
         virtual void ConstrainToWorldBounds(const sf::FloatRect& bounds);
+        [[nodiscard]] virtual float GetRenderSortKey() const;
 
         [[nodiscard]] bool IsActive() const
         {

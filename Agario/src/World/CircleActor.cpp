@@ -38,6 +38,11 @@ namespace Agario
         });
     }
 
+    float CircleActor::GetRenderSortKey() const
+    {
+        return GetRadius();
+    }
+
     float CircleActor::GetRadius() const
     {
         return m_shape.getRadius();

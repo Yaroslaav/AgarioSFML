@@ -49,4 +49,9 @@ namespace Engine
     void Actor::ConstrainToWorldBounds(const sf::FloatRect& bounds)
     {
     }
+
+    float Actor::GetRenderSortKey() const
+    {
+        return 0.f;
+    }
 }

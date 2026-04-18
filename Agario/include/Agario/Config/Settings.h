@@ -44,7 +44,7 @@ namespace Agario
     struct FoodSettings
     {
         int count = 2000;
-        float mass = .1f;
+        float mass = .05f;
         float spawnPadding = 12.f;
         float radius = 2.f;
         sf::Color color{255, 210, 70};

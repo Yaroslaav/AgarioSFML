@@ -47,6 +47,9 @@ namespace Engine
 
     void World::Render(Application& app) const
     {
+        std::vector<Actor*> renderActors;
+        renderActors.reserve(m_actors.size());
+
         for (const auto& actor : m_actors)
         {
             if (!actor->IsActive())
@@ -54,6 +57,19 @@ namespace Engine
                 continue;
             }
 
+            renderActors.push_back(actor.get());
+        }
+
+        std::stable_sort(
+            renderActors.begin(),
+            renderActors.end(),
+            [](const Actor* left, const Actor* right)
+            {
+                return left->GetRenderSortKey() < right->GetRenderSortKey();
+            });
+
+        for (Actor* actor : renderActors)
+        {
             actor->Render(app);
         }
     }
