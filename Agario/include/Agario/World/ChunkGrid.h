@@ -6,6 +6,8 @@
 #include <SFML/System/Vector2.hpp>
 #include <vector>
 
+#include "SFML/Graphics/Font.hpp"
+
 namespace Engine
 {
     class Window;
@@ -38,6 +40,8 @@ namespace Agario
             return m_columns > 0 && m_rows > 0;
         }
 
+        [[nodiscard]] sf::Vector2f GetChunkCenter(int col, int row) const;
+
     private:
         [[nodiscard]] int GetChunkIndex(const sf::Vector2f& worldPosition) const;
         void RebuildGridLines();
@@ -51,5 +55,6 @@ namespace Agario
         int m_rows = 0;
         std::vector<ChunkData> m_chunks;
         sf::VertexArray m_gridLines{sf::PrimitiveType::Lines};
+        sf::Font m_tuffyFont;
     };
 }

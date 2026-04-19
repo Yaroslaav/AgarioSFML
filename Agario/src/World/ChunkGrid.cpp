@@ -11,6 +11,7 @@
 #include <iostream>
 
 #include "SFML/Graphics/Font.hpp"
+#include "SFML/Graphics/Text.hpp"
 
 namespace Agario
 {
@@ -31,16 +32,10 @@ namespace Agario
 
         RebuildGridLines();
 
-         sf::Font font;
-         if (!font.openFromFile("assets/Fonts/Tuffy/Tuffy-Regular.ttf"))
+         if (!m_tuffyFont.openFromFile("assets/Fonts/Tuffy/Tuffy-Regular.ttf"))
          {
              std::cout << "Failed to load font\n";
          }
-         else
-         {
-             std::cout << "trueeeeee\n";
-        }
-        //std::cout << std::filesystem::current_path();
     }
 
     void ChunkGrid::ClearMass()
@@ -71,7 +66,7 @@ namespace Agario
             return;
         }
 
-        m_chunks[static_cast<std::size_t>(index)].enemyMass += m_dummyEnemyMassPerCell;
+        m_chunks[static_cast<std::size_t>(index)].enemyMass += cell.GetMass();
     }
 
     void ChunkGrid::Draw(Engine::Window& window) const
@@ -79,6 +74,30 @@ namespace Agario
         if (!IsInitialized())
         {
             return;
+        }
+        const unsigned int characterSize = static_cast<unsigned int>(
+                   std::clamp(std::min(m_chunkSize.x, m_chunkSize.y) * 0.22f, 10.f, 18.f));
+        sf::Text text(m_tuffyFont, "", characterSize);
+        text.setFillColor(sf::Color::White);
+
+        for (int row = 0; row < m_rows; row++)
+        {
+            for (int col = 0; col < m_columns; col++)
+            {
+                const ChunkData& chunk = m_chunks[row * m_columns + col];
+
+                std::ostringstream stream;
+                stream << std::setprecision(3) << "F: " << chunk.foodMass << "\nE: " << chunk.enemyMass;
+                text.setString(stream.str());
+
+                const sf::FloatRect localBounds = text.getLocalBounds();
+                text.setOrigin({
+                    localBounds.position.x + localBounds.size.x * .5f,
+                    localBounds.position.y + localBounds.size.y * .5f});
+
+                text.setPosition({GetChunkCenter(col, row)});
+                window.Draw(text);
+            }
         }
 
         window.Draw(m_gridLines);
@@ -93,6 +112,13 @@ namespace Agario
         }
 
         return &m_chunks[static_cast<std::size_t>(index)];
+    }
+
+    sf::Vector2f ChunkGrid::GetChunkCenter(const int col, const int row) const
+    {
+        return {
+            m_bounds.position.x + (static_cast<float>(col) + .5f) * m_chunkSize.x,
+            m_bounds.position.y + (static_cast<float>(row) + .5f) * m_chunkSize.y};
     }
 
     int ChunkGrid::GetChunkIndex(const sf::Vector2f& worldPosition) const
