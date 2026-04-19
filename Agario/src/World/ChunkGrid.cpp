@@ -7,6 +7,10 @@
 
 #include <algorithm>
 #include <cmath>
+#include <filesystem>
+#include <iostream>
+
+#include "SFML/Graphics/Font.hpp"
 
 namespace Agario
 {
@@ -26,6 +30,17 @@ namespace Agario
         m_chunks.assign(static_cast<std::size_t>(m_columns * m_rows), {});
 
         RebuildGridLines();
+
+         sf::Font font;
+         if (!font.openFromFile("assets/Fonts/Tuffy/Tuffy-Regular.ttf"))
+         {
+             std::cout << "Failed to load font\n";
+         }
+         else
+         {
+             std::cout << "trueeeeee\n";
+        }
+        //std::cout << std::filesystem::current_path();
     }
 
     void ChunkGrid::ClearMass()
