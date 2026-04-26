@@ -1,8 +1,7 @@
 #pragma once
 
 #include "Engine/Core/IGame.h"
-#include "Engine/World/World.h"
-#include "Agario/World/ChunkGrid.h"
+#include "Agario/World/AgarioWorld.h"
 
 namespace Agario
 {
@@ -18,9 +17,6 @@ namespace Agario
         void CheckCollision();
 
     private:
-        void UpdateChunkGrid();
-        
-        Engine::World m_world;
-        ChunkGrid m_chunkGrid;
+        AgarioWorld m_world;
     };
 }

@@ -28,7 +28,7 @@ namespace Agario
             m_bounds.size.x / static_cast<float>(m_columns),
             m_bounds.size.y / static_cast<float>(m_rows)
         };
-        m_chunks.assign(static_cast<std::size_t>(m_columns * m_rows), {});
+        m_chunks.assign(m_columns * m_rows, {});
 
         RebuildGridLines();
 
@@ -112,6 +112,16 @@ namespace Agario
         }
 
         return &m_chunks[static_cast<std::size_t>(index)];
+    }
+
+    const ChunkData* ChunkGrid::GetChunkData(const int col, const int row) const
+    {
+        if (!IsInitialized() || col < 0 || col >= m_columns || row < 0 || row >= m_rows)
+        {
+            return nullptr;
+        }
+
+        return &m_chunks[row * m_columns + col];
     }
 
     sf::Vector2f ChunkGrid::GetChunkCenter(const int col, const int row) const

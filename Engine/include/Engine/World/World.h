@@ -16,6 +16,8 @@ namespace Engine
     class World
     {
     public:
+        virtual ~World() = default;
+
         template<typename T, typename... TArgs>
         T* SpawnActor(TArgs&&... args)
         {
@@ -23,6 +25,7 @@ namespace Engine
 
             auto actor = std::make_unique<T>(std::forward<TArgs>(args)...);
             T* rawPtr = actor.get();
+            rawPtr->SetWorld(this);
             GetOrCreateBucket<T>().actors.push_back(rawPtr);
             m_pendingActors.push_back(std::move(actor));
             return rawPtr;
@@ -43,10 +46,11 @@ namespace Engine
             return static_cast<const ActorBucket<T>&>(*it->second).actors;
         }
 
-        void BeginPlay(Application& app);
-        void EndPlay();
-        void Tick(Application& app, float deltaTime);
-        void Render(Application& app) const;
+        virtual void BeginPlay(Application& app);
+        virtual void EndPlay();
+        virtual void Tick(Application& app, float deltaTime);
+        virtual void Render(Application& app) const;
+
         void SetActiveCamera(Camera* camera);
         [[nodiscard]] Camera* GetActiveCamera() const;
         void SetBounds(const sf::FloatRect& bounds);

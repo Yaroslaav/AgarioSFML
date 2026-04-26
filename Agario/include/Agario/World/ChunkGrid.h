@@ -35,9 +35,20 @@ namespace Agario
         void Draw(Engine::Window& window) const;
 
         [[nodiscard]] const ChunkData* GetChunkAt(const sf::Vector2f& worldPosition) const;
+        [[nodiscard]] const ChunkData* GetChunkData(int col, int row) const;
         [[nodiscard]] bool IsInitialized() const
         {
             return m_columns > 0 && m_rows > 0;
+        }
+
+        [[nodiscard]] int GetColumns() const
+        {
+            return m_columns;
+        }
+
+        [[nodiscard]] int GetRows() const
+        {
+            return m_rows;
         }
 
         [[nodiscard]] sf::Vector2f GetChunkCenter(int col, int row) const;

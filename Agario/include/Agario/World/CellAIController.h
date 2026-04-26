@@ -4,6 +4,7 @@
 
 namespace Agario
 {
+    class Cell;
 
     class CellAIController : public Engine::AIController
     {

@@ -13,6 +13,7 @@ namespace Engine
 {
 
     class Application;
+    class World;
 
     class Actor
     {
@@ -89,8 +90,27 @@ namespace Engine
         {
             return m_transformComponent;
         }
+
+        [[nodiscard]] World* GetWorld() const
+        {
+            return m_world;
+        }
+
+        template<typename T>
+        [[nodiscard]] T* GetWorld() const
+        {
+            return dynamic_cast<T*>(m_world);
+        }
     private:
+        friend class World;
+
+        void SetWorld(World* world)
+        {
+            m_world = world;
+        }
+
         bool m_isActive = true;
+        World* m_world = nullptr;
         TransformComponent m_transformComponent;
         std::vector<std::unique_ptr<ActorComponent>> m_components;
     };

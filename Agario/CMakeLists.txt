@@ -13,6 +13,8 @@ add_executable(Agario
         src/World/Food.cpp
         include/Agario/World/CellAIController.h
         src/World/CellAIController.cpp
+        include/Agario/World/AgarioWorld.h
+        src/World/AgarioWorld.cpp
         include/Agario/World/ChunkGrid.h
         src/World/ChunkGrid.cpp
 )

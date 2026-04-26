@@ -1,6 +1,8 @@
 #include "Agario/World/CellAIController.h"
 
 #include "Agario/GameplayTags/GameTags.h"
+#include "Agario/World/AgarioWorld.h"
+#include "Agario/World/Cell.h"
 #include "Engine/GameplayTags/GameTags.h"
 #include "Engine/Math/MathUtils.h"
 
@@ -11,7 +13,7 @@ namespace Agario
     {
     }
 
-    CellAIController::CellAIController(const BotSettings &settings, Actor *pawn)
+    CellAIController::CellAIController(const BotSettings &settings, Engine::Actor *pawn)
         : AIController(settings, pawn)
     {
     }
@@ -27,13 +29,13 @@ namespace Agario
     {
         AIController::Tick(app, deltaTime);
 
-        Actor* pawn = GetPawn();
-        if (pawn == nullptr || !pawn->IsActive())
+        Cell* cell = GetPawn<Cell>();
+        if (cell == nullptr || !cell->IsActive())
         {
             return;
         }
 
-        auto* movementComponent = pawn->GetComponent<Engine::MovementComponent>();
+        auto* movementComponent = cell->GetComponent<Engine::MovementComponent>();
         if (movementComponent == nullptr)
         {
             return;
@@ -41,7 +43,11 @@ namespace Agario
 
         if (m_currentState == Tags::Agario::AI_State_Deciding)
         {
-            m_targetPosition = GetRandomLocationInRadius(GetPawn()->GetActorPosition(), 500);
+            if (auto* world = GetWorld<AgarioWorld>())
+            {
+                //if (world->GetChunkGrid())
+            }
+            m_targetPosition = GetRandomLocationInRadius(cell->GetActorPosition(), 500.f);
             m_currentState = Tags::Agario::AI_State_Roaming;
         }
         else if (m_currentState == Tags::Agario::AI_State_Roaming)
@@ -52,7 +58,7 @@ namespace Agario
                 return;
             }
 
-            movementComponent->AddInputVector(Engine::Math::NormalizeOrZero(m_targetPosition - GetPawn()->GetActorPosition()));
+            movementComponent->AddInputVector(Engine::Math::NormalizeOrZero(m_targetPosition - cell->GetActorPosition()));
         }
     }
 }

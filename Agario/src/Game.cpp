@@ -8,16 +8,13 @@
 #include "Engine/World/Controller/AIController.h"
 #include "Engine/World/Controller/PlayerController.h"
 
-#include <optional>
-
 #include "Agario/World/CellAIController.h"
 
 namespace Agario
 {
     void Game::OnInit(Engine::Application& app)
     {
-        m_world.SetBounds(Settings.world.bounds);
-        m_chunkGrid.Initialize(Settings.world.bounds, Settings.chunks);
+        m_world.Initialize(Settings.world, Settings.chunks);
 
         Cell* playerCell = m_world.SpawnActor<Cell>(
             Settings.player,
@@ -49,7 +46,6 @@ namespace Agario
         camera->SetFocusActor(*playerCell);
         m_world.SetActiveCamera(camera);
         m_world.BeginPlay(app);
-        UpdateChunkGrid();
     }
 
     void Game::OnEvent(Engine::Application& app)
@@ -70,12 +66,10 @@ namespace Agario
         m_world.Tick(app, deltaTime);
 
         CheckCollision();
-        UpdateChunkGrid();
     }
 
     void Game::OnRender(Engine::Application& app)
     {
-        m_chunkGrid.Draw(app.GetWindow());
         m_world.Render(app);
     }
 
@@ -135,27 +129,6 @@ namespace Agario
                 smallerPlayer->ResetMass();
                 smallerCollision->OnBeginOverlap.Broadcast(largerPlayer, largerCollision);
                 largerCollision->OnBeginOverlap.Broadcast(smallerPlayer, smallerCollision);
-            }
-        }
-    }
-
-    void Game::UpdateChunkGrid()
-    {
-        m_chunkGrid.ClearMass();
-
-        for (const Food* food : m_world.GetAllActorsOfClass<Food>())
-        {
-            if (food != nullptr && food->IsActive())
-            {
-                m_chunkGrid.AddFood(*food);
-            }
-        }
-
-        for (const Cell* cell : m_world.GetAllActorsOfClass<Cell>())
-        {
-            if (cell != nullptr && cell->IsActive())
-            {
-                m_chunkGrid.AddCell(*cell);
             }
         }
     }
