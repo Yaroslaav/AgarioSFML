@@ -1,5 +1,6 @@
 #include "Engine/Core/Application.h"
 #include "Engine/Core/IGame.h"
+#include "Engine/Core/DebugDraw.h"
 
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Clock.hpp>
@@ -69,6 +70,7 @@ namespace Engine
             m_window.Clear(m_clearColor);
             m_renderSystem.DrawAll(m_window);
             game.OnRender(*this);
+            DebugDraw::Render(*this);
             m_window.Display();
         }
 
