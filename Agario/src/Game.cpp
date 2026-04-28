@@ -15,7 +15,13 @@ namespace Agario
     void Game::OnInit(Engine::Application& app)
     {
         app.GetInput().AddNewBind(Settings.input.debugToggleKey, Engine::GameplayTag("Input.Action.DebugToggle"))
-            .OnPressedOnce.AddListener([&app]() { app.ToggleDebugMode(); });
+            .OnPressedOnce.AddListener([]() { Engine::DebugSystem::ToggleDebugMode(); });
+
+        app.GetInput().AddNewBind(Settings.input.debugChunkToggleKey, Engine::GameplayTag("Input.Action.DebugChunkToggle"))
+            .OnPressedOnce.AddListener([]() { Engine::DebugSystem::ToggleChunkDebug(); });
+
+        app.GetInput().AddNewBind(Settings.input.debugTracesToggleKey, Engine::GameplayTag("Input.Action.DebugTracesToggle"))
+            .OnPressedOnce.AddListener([]() { Engine::DebugSystem::ToggleDebugTraces(); });
 
         app.GetInput().AddNewBind(Settings.input.quitKey, Engine::GameplayTag("Input.Action.Quit"))
             .OnPressedOnce.AddListener([&app]() { app.Close(); });

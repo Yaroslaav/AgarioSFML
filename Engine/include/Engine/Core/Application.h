@@ -6,6 +6,7 @@
 #include "Engine/Input/InputManager.h"
 #include "Engine/View/RenderSystem.h"
 #include "Engine/View/Window.h"
+#include "Engine/Core/DebugSystem.h"
 
 namespace Engine
 {
@@ -52,26 +53,10 @@ namespace Engine
             return m_renderSystem;
         }
 
-        [[nodiscard]] bool IsDebugMode() const
-        {
-            return m_isDebugMode;
-        }
-
-        void SetDebugMode(bool enabled)
-        {
-            m_isDebugMode = enabled;
-        }
-
-        void ToggleDebugMode()
-        {
-            m_isDebugMode = !m_isDebugMode;
-        }
-
     private:
         Window m_window;
         InputManager m_input;
         RenderSystem m_renderSystem;
         sf::Color m_clearColor = sf::Color::Black;
-        bool m_isDebugMode = false;
     };
 }

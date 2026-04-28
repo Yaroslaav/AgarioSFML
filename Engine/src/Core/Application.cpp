@@ -1,6 +1,6 @@
 #include "Engine/Core/Application.h"
 #include "Engine/Core/IGame.h"
-#include "Engine/Core/DebugDraw.h"
+#include "Engine/Core/DebugSystem.h"
 
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Clock.hpp>
@@ -21,7 +21,7 @@ namespace Engine
             settings.input.zoomOutFactor,
             settings.window.startFullscreen)
     {
-        m_isDebugMode = settings.debug.startDebugMode;
+        DebugSystem::SetDebugMode(settings.debug.startDebugMode);
     }
 
     Application::Application(
@@ -70,7 +70,7 @@ namespace Engine
             m_window.Clear(m_clearColor);
             m_renderSystem.DrawAll(m_window);
             game.OnRender(*this);
-            DebugDraw::Render(*this);
+            DebugSystem::Render(*this);
             m_window.Display();
         }
 

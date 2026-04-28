@@ -1,4 +1,4 @@
-#include "Engine/Core/DebugDraw.h"
+#include "Engine/Core/DebugSystem.h"
 #include "Engine/Core/Application.h"
 #include "Engine/View/Window.h"
 #include <SFML/Graphics/VertexArray.hpp>
@@ -7,22 +7,26 @@
 
 namespace Engine
 {
-    std::vector<DebugDraw::DebugLine> DebugDraw::s_lines;
-    std::vector<DebugDraw::DebugCircle> DebugDraw::s_circles;
+    std::vector<DebugSystem::DebugLine> DebugSystem::s_lines;
+    std::vector<DebugSystem::DebugCircle> DebugSystem::s_circles;
+    
+    bool DebugSystem::s_isDebugMode = false;
+    bool DebugSystem::s_showChunkDebug = false;
+    bool DebugSystem::s_showDebugTraces = false;
 
-    void DebugDraw::Line(const sf::Vector2f &start, const sf::Vector2f &end, const sf::Color &color, const float thickness)
+    void DebugSystem::DrawLine(const sf::Vector2f &start, const sf::Vector2f &end, const sf::Color &color, const float thickness)
     {
         s_lines.push_back({start, end, color, thickness});
     }
 
-    void DebugDraw::Circle(const sf::Vector2f& center, const float radius, const sf::Color& color, const float thickness, const int segments)
+    void DebugSystem::DrawCircle(const sf::Vector2f& center, const float radius, const sf::Color& color, const float thickness, const int segments)
     {
         s_circles.push_back({center, radius, color, segments, thickness});
     }
 
-    void DebugDraw::Render(Application& app)
+    void DebugSystem::Render(Application& app)
     {
-        if (!app.IsDebugMode())
+        if (!IsDebugMode() || !IsDebugTracesEnabled())
         {
             Clear();
             return;
@@ -59,7 +63,7 @@ namespace Engine
         Clear();
     }
 
-    sf::RectangleShape DebugDraw::CreateRectangleShape(const DebugLine& line)
+    sf::RectangleShape DebugSystem::CreateRectangleShape(const DebugLine& line)
     {
         const sf::Vector2f direction = line.end - line.start;
         const float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
@@ -74,7 +78,7 @@ namespace Engine
         return shape;
     }
 
-    sf::CircleShape DebugDraw::CreateCircleShape(const DebugCircle& circle)
+    sf::CircleShape DebugSystem::CreateCircleShape(const DebugCircle& circle)
     {
         sf::CircleShape shape(circle.radius, static_cast<std::size_t>(circle.segments));
         shape.setPosition(circle.center);
@@ -85,9 +89,44 @@ namespace Engine
         return shape;
     }
 
-    void DebugDraw::Clear()
+    void DebugSystem::Clear()
     {
         s_lines.clear();
         s_circles.clear();
+    }
+
+    bool DebugSystem::IsDebugMode()
+    {
+        return s_isDebugMode;
+    }
+
+    void DebugSystem::SetDebugMode(bool enabled)
+    {
+        s_isDebugMode = enabled;
+    }
+
+    void DebugSystem::ToggleDebugMode()
+    {
+        s_isDebugMode = !s_isDebugMode;
+    }
+
+    bool DebugSystem::IsChunkDebugEnabled()
+    {
+        return s_showChunkDebug;
+    }
+
+    void DebugSystem::ToggleChunkDebug()
+    {
+        s_showChunkDebug = !s_showChunkDebug;
+    }
+
+    bool DebugSystem::IsDebugTracesEnabled()
+    {
+        return s_showDebugTraces;
+    }
+
+    void DebugSystem::ToggleDebugTraces()
+    {
+        s_showDebugTraces = !s_showDebugTraces;
     }
 }

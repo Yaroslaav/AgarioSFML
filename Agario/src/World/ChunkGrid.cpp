@@ -10,6 +10,7 @@
 #include <filesystem>
 #include <iostream>
 
+#include "Engine/Core/DebugSystem.h"
 #include "Engine/Math/MathUtils.h"
 #include "SFML/Graphics/Font.hpp"
 #include "SFML/Graphics/Text.hpp"
@@ -74,28 +75,31 @@ namespace Agario
         {
             return;
         }
-        const unsigned int characterSize = static_cast<unsigned int>(
-                   std::clamp(std::min(m_chunkSize.x, m_chunkSize.y) * 0.22f, 10.f, 18.f));
-        sf::Text text(m_tuffyFont, "", characterSize);
-        text.setFillColor(sf::Color::White);
-
-        for (int row = 0; row < m_rows; row++)
+        if (Engine::DebugSystem::IsDebugMode() && Engine::DebugSystem::IsChunkDebugEnabled())
         {
-            for (int col = 0; col < m_columns; col++)
+            const unsigned int characterSize = static_cast<unsigned int>(
+                       std::clamp(std::min(m_chunkSize.x, m_chunkSize.y) * 0.22f, 10.f, 18.f));
+            sf::Text text(m_tuffyFont, "", characterSize);
+            text.setFillColor(sf::Color::White);
+
+            for (int row = 0; row < m_rows; row++)
             {
-                const ChunkData& chunk = m_chunks[row * m_columns + col];
+                for (int col = 0; col < m_columns; col++)
+                {
+                    const ChunkData& chunk = m_chunks[row * m_columns + col];
 
-                std::ostringstream stream;
-                stream << std::setprecision(3) << "F: " << chunk.foodMass << "\nE: " << chunk.enemyMass;
-                text.setString(stream.str());
+                    std::ostringstream stream;
+                    stream << std::setprecision(3) << "F: " << chunk.foodMass << "\nE: " << chunk.enemyMass;
+                    text.setString(stream.str());
 
-                const sf::FloatRect localBounds = text.getLocalBounds();
-                text.setOrigin({
-                    localBounds.position.x + localBounds.size.x * .5f,
-                    localBounds.position.y + localBounds.size.y * .5f});
+                    const sf::FloatRect localBounds = text.getLocalBounds();
+                    text.setOrigin({
+                        localBounds.position.x + localBounds.size.x * .5f,
+                        localBounds.position.y + localBounds.size.y * .5f});
 
-                text.setPosition({GetChunkCenter(col, row)});
-                window.Draw(text);
+                    text.setPosition({GetChunkCenter(col, row)});
+                    window.Draw(text);
+                }
             }
         }
 

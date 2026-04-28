@@ -25,6 +25,8 @@ namespace Engine
     {
         sf::Keyboard::Key fullscreenToggleKey = sf::Keyboard::Key::F11;
         sf::Keyboard::Key debugToggleKey = sf::Keyboard::Key::F1;
+        sf::Keyboard::Key debugChunkToggleKey = sf::Keyboard::Key::Numpad1;
+        sf::Keyboard::Key debugTracesToggleKey = sf::Keyboard::Key::Numpad2;
         sf::Keyboard::Key quitKey = sf::Keyboard::Key::Escape;
         sf::Keyboard::Key zoomInKey = sf::Keyboard::Key::Equal;
         sf::Keyboard::Key zoomOutKey = sf::Keyboard::Key::Hyphen;

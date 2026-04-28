@@ -3,7 +3,7 @@
 #include "Agario/GameplayTags/GameTags.h"
 #include "Agario/World/AgarioWorld.h"
 #include "Agario/World/Cell.h"
-#include "Engine/Core/DebugDraw.h"
+#include "Engine/Core/DebugSystem.h"
 #include "Engine/GameplayTags/GameTags.h"
 #include "Engine/Math/MathUtils.h"
 
@@ -63,8 +63,8 @@ namespace Agario
         }
         if (m_currentState == Tags::Agario::AI_State_Roaming)
         {
-            Engine::DebugDraw::Line(cell->GetActorPosition(), m_targetPosition, sf::Color::Cyan);
-            Engine::DebugDraw::Circle(m_targetPosition, 10.f, sf::Color::Green);
+            Engine::DebugSystem::DrawLine(cell->GetActorPosition(), m_targetPosition, sf::Color::Cyan);
+            Engine::DebugSystem::DrawCircle(m_targetPosition, 10.f, sf::Color::Green);
 
             if (ReachedPosition(m_targetPosition) || Engine::Math::IsNearlyZero(m_targetPosition))
             {

@@ -12,14 +12,24 @@ namespace Engine
     class Window;
     class Application;
 
-    class DebugDraw
+    class DebugSystem
     {
     public:
-        static void Line(const sf::Vector2f& start, const sf::Vector2f& end, const sf::Color& color = sf::Color::Red, float thickness = 1.f);
-        static void Circle(const sf::Vector2f &center, float radius, const sf::Color &color = sf::Color::Red, float thickness = 1.f, int segments = 32);
+        static void DrawLine(const sf::Vector2f& start, const sf::Vector2f& end, const sf::Color& color = sf::Color::Red, float thickness = 1.f);
+        static void DrawCircle(const sf::Vector2f &center, float radius, const sf::Color &color = sf::Color::Red, float thickness = 1.f, int segments = 32);
 
         static void Render(Application& app);
         static void Clear();
+
+        static bool IsDebugMode();
+        static void SetDebugMode(bool enabled);
+        static void ToggleDebugMode();
+
+        static bool IsChunkDebugEnabled();
+        static void ToggleChunkDebug();
+
+        static bool IsDebugTracesEnabled();
+        static void ToggleDebugTraces();
 
     private:
         struct DebugLine
@@ -44,5 +54,9 @@ namespace Engine
 
         static std::vector<DebugLine> s_lines;
         static std::vector<DebugCircle> s_circles;
+        
+        static bool s_isDebugMode;
+        static bool s_showChunkDebug;
+        static bool s_showDebugTraces;
     };
 }
