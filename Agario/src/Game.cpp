@@ -17,6 +17,9 @@ namespace Agario
         app.GetInput().AddNewBind(Settings.input.debugToggleKey, Engine::GameplayTag("Input.Action.DebugToggle"))
             .OnPressedOnce.AddListener([&app]() { app.ToggleDebugMode(); });
 
+        app.GetInput().AddNewBind(Settings.input.quitKey, Engine::GameplayTag("Input.Action.Quit"))
+            .OnPressedOnce.AddListener([&app]() { app.Close(); });
+
         m_world.Initialize(Settings.world, Settings.chunks);
 
         Cell* playerCell = m_world.SpawnActor<Cell>(
