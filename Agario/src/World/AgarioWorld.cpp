@@ -40,7 +40,10 @@ namespace Agario
 
     void AgarioWorld::Render(Engine::Application &app) const
     {
-        m_chunkGrid.Draw(app.GetWindow());
+        if (app.IsDebugMode())
+        {
+            m_chunkGrid.Draw(app.GetWindow());
+        }
         World::Render(app);
     }
 

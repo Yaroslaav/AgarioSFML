@@ -24,10 +24,16 @@ namespace Engine
     struct InputSettings
     {
         sf::Keyboard::Key fullscreenToggleKey = sf::Keyboard::Key::F11;
+        sf::Keyboard::Key debugToggleKey = sf::Keyboard::Key::F1;
         sf::Keyboard::Key zoomInKey = sf::Keyboard::Key::Equal;
         sf::Keyboard::Key zoomOutKey = sf::Keyboard::Key::Hyphen;
         float zoomInFactor = 0.9f;
         float zoomOutFactor = 1.1f;
+    };
+
+    struct DebugSettings
+    {
+        bool startDebugMode = false;
     };
 
     struct AppSettings
@@ -35,5 +41,6 @@ namespace Engine
         WindowSettings window;
         RenderSettings render;
         InputSettings input;
+        DebugSettings debug;
     };
 }

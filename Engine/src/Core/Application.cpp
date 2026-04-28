@@ -20,6 +20,7 @@ namespace Engine
             settings.input.zoomOutFactor,
             settings.window.startFullscreen)
     {
+        m_isDebugMode = settings.debug.startDebugMode;
     }
 
     Application::Application(
