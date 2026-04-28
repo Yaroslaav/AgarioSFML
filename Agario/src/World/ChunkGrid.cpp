@@ -10,6 +10,7 @@
 #include <filesystem>
 #include <iostream>
 
+#include "Engine/Math/MathUtils.h"
 #include "SFML/Graphics/Font.hpp"
 #include "SFML/Graphics/Text.hpp"
 
@@ -19,8 +20,6 @@ namespace Agario
     {
         m_bounds = bounds;
         m_gridColor = settings.gridColor;
-        m_dummyFoodMassPerFood = settings.dummyFoodMassPerFood;
-        m_dummyEnemyMassPerCell = settings.dummyEnemyMassPerCell;
 
         m_columns = std::max(1, settings.columns);
         m_rows = std::max(1, settings.rows);
@@ -55,7 +54,7 @@ namespace Agario
             return;
         }
 
-        m_chunks[static_cast<std::size_t>(index)].foodMass += m_dummyFoodMassPerFood;
+        m_chunks[static_cast<std::size_t>(index)].foodMass += food.GetMass();
     }
 
     void ChunkGrid::AddCell(const Cell& cell)
@@ -131,24 +130,66 @@ namespace Agario
             m_bounds.position.y + (static_cast<float>(row) + .5f) * m_chunkSize.y};
     }
 
-    int ChunkGrid::GetChunkIndex(const sf::Vector2f& worldPosition) const
+    sf::Vector2f ChunkGrid::GetBestFoodChunkPosition(const sf::Vector2f& center, const float radius) const
     {
         if (!IsInitialized())
         {
-            return -1;
+            return center;
         }
 
-        if (!m_bounds.contains(worldPosition))
+        const int startCol = WorldToGridX(center.x - radius);
+        const int startRow = WorldToGridY(center.y - radius);
+        const int endCol = WorldToGridX(center.x + radius);
+        const int endRow = WorldToGridY(center.y + radius);
+
+        float maxFood = -1.f;
+        sf::Vector2f bestPos = center;
+        const float radiusSq = radius * radius;
+
+        for (int row = startRow; row <= endRow; ++row)
+        {
+            for (int col = startCol; col <= endCol; ++col)
+            {
+                const sf::Vector2f chunkCenter = GetChunkCenter(col, row);
+                if (Engine::Math::DistanceSquared(chunkCenter, center) <= radiusSq)
+                {
+                    const int chunkIndex = row * m_columns + col;
+                    if (m_chunks[chunkIndex].foodMass > maxFood)
+                    {
+                        maxFood = m_chunks[chunkIndex].foodMass;
+                        bestPos = chunkCenter;
+                    }
+                }
+            }
+        }
+
+        return bestPos;
+    }
+
+    int ChunkGrid::GetChunkIndex(const sf::Vector2f& worldPosition) const
+    {
+        if (!IsInitialized() || !m_bounds.contains(worldPosition))
         {
             return -1;
         }
 
-        const float localX = worldPosition.x - m_bounds.position.x;
-        const float localY = worldPosition.y - m_bounds.position.y;
+        return WorldToGridY(worldPosition.y) * m_columns + WorldToGridX(worldPosition.x);
+    }
 
-        const int column = std::clamp(static_cast<int>(localX / m_chunkSize.x), 0, m_columns - 1);
-        const int row = std::clamp(static_cast<int>(localY / m_chunkSize.y), 0, m_rows - 1);
-        return row * m_columns + column;
+    int ChunkGrid::WorldToGridX(const float x) const
+    {
+        return std::clamp(static_cast<int>((x - m_bounds.position.x) / m_chunkSize.x), 0, m_columns - 1);
+    }
+
+    int ChunkGrid::WorldToGridY(const float y) const
+    {
+        return std::clamp(static_cast<int>((y - m_bounds.position.y) / m_chunkSize.y), 0, m_rows - 1);
+    }
+
+    void ChunkGrid::AddGridLine(const sf::Vector2f start, const sf::Vector2f end)
+    {
+        m_gridLines.append(sf::Vertex{start, m_gridColor});
+        m_gridLines.append(sf::Vertex{end, m_gridColor});
     }
 
     void ChunkGrid::RebuildGridLines()
@@ -160,18 +201,16 @@ namespace Agario
         const float right = m_bounds.position.x + m_bounds.size.x;
         const float bottom = m_bounds.position.y + m_bounds.size.y;
 
-        for (int column = 0; column <= m_columns; ++column)
+        for (int column = 0; column <= m_columns; column++)
         {
             const float x = std::min(left + column * m_chunkSize.x, right);
-            m_gridLines.append(sf::Vertex{{x, top}, m_gridColor});
-            m_gridLines.append(sf::Vertex{{x, bottom}, m_gridColor});
+            AddGridLine({x, top}, {x, bottom});
         }
 
-        for (int row = 0; row <= m_rows; ++row)
+        for (int row = 0; row <= m_rows; row++)
         {
             const float y = std::min(top + row * m_chunkSize.y, bottom);
-            m_gridLines.append(sf::Vertex{{left, y}, m_gridColor});
-            m_gridLines.append(sf::Vertex{{right, y}, m_gridColor});
+            AddGridLine({left, y}, {right, y});
         }
     }
 }

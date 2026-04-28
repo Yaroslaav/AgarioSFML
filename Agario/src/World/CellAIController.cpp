@@ -45,9 +45,19 @@ namespace Agario
         {
             if (auto* world = GetWorld<AgarioWorld>())
             {
-                //if (world->GetChunkGrid())
+                auto& chunkGrid = world->GetChunkGrid();
+                m_targetPosition = chunkGrid.GetBestFoodChunkPosition(cell->GetActorPosition(), Settings.bots.ai.roamingRadius);
+                
+                if (Engine::Math::Distance(m_targetPosition, cell->GetActorPosition()) < GetAcceptableRadius())
+                {
+                    m_targetPosition = GetRandomLocationInRadius(cell->GetActorPosition(), Settings.bots.ai.roamingRadius);
+                }
             }
-            m_targetPosition = GetRandomLocationInRadius(cell->GetActorPosition(), 500.f);
+            else
+            {
+                m_targetPosition = GetRandomLocationInRadius(cell->GetActorPosition(), Settings.bots.ai.roamingRadius);
+            }
+            
             m_currentState = Tags::Agario::AI_State_Roaming;
         }
         else if (m_currentState == Tags::Agario::AI_State_Roaming)

@@ -52,18 +52,22 @@ namespace Agario
         }
 
         [[nodiscard]] sf::Vector2f GetChunkCenter(int col, int row) const;
+        [[nodiscard]] sf::Vector2f GetBestFoodChunkPosition(const sf::Vector2f& center, float radius) const;
 
     private:
+        [[nodiscard]] int WorldToGridX(float x) const;
+        [[nodiscard]] int WorldToGridY(float y) const;
         [[nodiscard]] int GetChunkIndex(const sf::Vector2f& worldPosition) const;
+        void AddGridLine(sf::Vector2f start, sf::Vector2f end);
         void RebuildGridLines();
 
         sf::FloatRect m_bounds{};
         sf::Vector2f m_chunkSize{};
         sf::Color m_gridColor = sf::Color::Transparent;
-        float m_dummyFoodMassPerFood = 1.f;
-        float m_dummyEnemyMassPerCell = 1.f;
+
         int m_columns = 0;
         int m_rows = 0;
+
         std::vector<ChunkData> m_chunks;
         sf::VertexArray m_gridLines{sf::PrimitiveType::Lines};
         sf::Font m_tuffyFont;

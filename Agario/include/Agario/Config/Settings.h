@@ -25,7 +25,7 @@ namespace Agario
 
     struct BotAISettings
     {
-        float roamingRadius = 220.f;
+        float roamingRadius = 500.f;
         float retargetInterval = 1.5f;
         float acceptableRadius = 4.f;
     };
@@ -65,8 +65,6 @@ namespace Agario
         int columns = 50;
         int rows = 50;
         sf::Color gridColor{80, 80, 80, 120};
-        float dummyFoodMassPerFood = 1.f;
-        float dummyEnemyMassPerCell = 1.f;
     };
 
     struct GameSettings : Engine::AppSettings

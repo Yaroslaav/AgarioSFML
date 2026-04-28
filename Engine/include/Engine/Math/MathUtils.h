@@ -27,4 +27,15 @@ namespace Engine::Math
         return {vector.x * inverseLength, vector.y * inverseLength};
     }
 
+    inline float DistanceSquared(const sf::Vector2f a, const sf::Vector2f b)
+    {
+        const sf::Vector2f diff = a - b;
+        return diff.x * diff.x + diff.y * diff.y;
+    }
+
+    inline float Distance(const sf::Vector2f a, const sf::Vector2f b)
+    {
+        return std::sqrt(DistanceSquared(a, b));
+    }
+
 }
