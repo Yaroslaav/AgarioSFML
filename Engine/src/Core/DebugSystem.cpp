@@ -4,6 +4,7 @@
 #include <SFML/Graphics/VertexArray.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <cmath>
+#include <algorithm>
 
 namespace Engine
 {
@@ -14,17 +15,17 @@ namespace Engine
     bool DebugSystem::s_showChunkDebug = false;
     bool DebugSystem::s_showDebugTraces = false;
 
-    void DebugSystem::DrawLine(const sf::Vector2f &start, const sf::Vector2f &end, const sf::Color &color, const float thickness)
+    void DebugSystem::DrawLine(const sf::Vector2f &start, const sf::Vector2f &end, const sf::Color &color, const float thickness, const float duration)
     {
-        s_lines.push_back({start, end, color, thickness});
+        s_lines.push_back({start, end, color, thickness, duration});
     }
 
-    void DebugSystem::DrawCircle(const sf::Vector2f& center, const float radius, const sf::Color& color, const float thickness, const int segments)
+    void DebugSystem::DrawCircle(const sf::Vector2f& center, const float radius, const sf::Color& color, const float thickness, const int segments, const float duration)
     {
-        s_circles.push_back({center, radius, color, segments, thickness});
+        s_circles.push_back({center, radius, color, segments, thickness, duration});
     }
 
-    void DebugSystem::Render(Application& app)
+    void DebugSystem::Render(Application& app, const float deltaTime)
     {
         if (!IsDebugMode() || !IsDebugTracesEnabled())
         {
@@ -37,7 +38,7 @@ namespace Engine
         if (!s_lines.empty())
         {
             sf::VertexArray va(sf::PrimitiveType::Lines);
-            for (const auto& line : s_lines)
+            for (auto& line : s_lines)
             {
                 if (line.thickness <= 1.01f)
                 {
@@ -60,7 +61,8 @@ namespace Engine
             window.Draw(CreateCircleShape(circle));
         }
 
-        Clear();
+        UpdateDebugShapes(s_lines, deltaTime);
+        UpdateDebugShapes(s_circles, deltaTime);
     }
 
     sf::RectangleShape DebugSystem::CreateRectangleShape(const DebugLine& line)
@@ -128,5 +130,19 @@ namespace Engine
     void DebugSystem::ToggleDebugTraces()
     {
         s_showDebugTraces = !s_showDebugTraces;
+    }
+    
+    template<typename T>
+    void DebugSystem::UpdateDebugShapes(T& shapes, float deltaTime)
+    {
+        auto updateRemainingTime = [deltaTime](auto& item) {
+            if (item.remainingTime > 0.f)
+            {
+                item.remainingTime -= deltaTime;
+                return item.remainingTime <= 0.f;
+            }
+            return item.remainingTime == 0.f;
+        };
+        shapes.erase(std::remove_if(shapes.begin(), shapes.end(), updateRemainingTime), shapes.end());
     }
 }

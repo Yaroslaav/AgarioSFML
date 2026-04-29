@@ -70,7 +70,7 @@ namespace Engine
             m_window.Clear(m_clearColor);
             m_renderSystem.DrawAll(m_window);
             game.OnRender(*this);
-            DebugSystem::Render(*this);
+            DebugSystem::Render(*this, deltaTime);
             m_window.Display();
         }
 

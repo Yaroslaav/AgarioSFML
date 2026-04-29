@@ -15,10 +15,10 @@ namespace Engine
     class DebugSystem
     {
     public:
-        static void DrawLine(const sf::Vector2f& start, const sf::Vector2f& end, const sf::Color& color = sf::Color::Red, float thickness = 1.f);
-        static void DrawCircle(const sf::Vector2f &center, float radius, const sf::Color &color = sf::Color::Red, float thickness = 1.f, int segments = 32);
+        static void DrawLine(const sf::Vector2f& start, const sf::Vector2f& end, const sf::Color& color = sf::Color::Red, float thickness = 1.f, float duration = 0.f);
+        static void DrawCircle(const sf::Vector2f &center, float radius, const sf::Color &color = sf::Color::Red, float thickness = 1.f, int segments = 32, float duration = 0.f);
 
-        static void Render(Application& app);
+        static void Render(Application& app, float deltaTime);
         static void Clear();
 
         static bool IsDebugMode();
@@ -38,6 +38,7 @@ namespace Engine
             sf::Vector2f end;
             sf::Color color;
             float thickness;
+            float remainingTime;
         };
 
         struct DebugCircle
@@ -47,10 +48,14 @@ namespace Engine
             sf::Color color;
             int segments;
             float thickness;
+            float remainingTime;
         };
 
         static sf::RectangleShape CreateRectangleShape(const DebugLine& line);
         static sf::CircleShape CreateCircleShape(const DebugCircle& circle);
+        
+        template<typename T>
+        static void UpdateDebugShapes(T& shapes, float deltaTime);
 
         static std::vector<DebugLine> s_lines;
         static std::vector<DebugCircle> s_circles;
