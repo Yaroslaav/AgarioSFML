@@ -23,8 +23,10 @@ namespace Agario
         void OnUnPossess() override;
 
     private:
+        BotAISettings m_settings;
         sf::Vector2f m_targetPosition;
         Engine::GameplayTag m_currentState;
         Engine::Event<Actor*>::EventHandle m_onPawnDeathEventHandle{};
+        float m_retargetTimer = 0.f;
     };
 }

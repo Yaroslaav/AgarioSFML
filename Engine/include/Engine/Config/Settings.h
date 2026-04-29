@@ -39,6 +39,11 @@ namespace Engine
         bool startDebugMode = false;
     };
 
+    struct AIControllerSettings
+    {
+        float acceptableRadius = 4.f;
+    };
+
     struct AppSettings
     {
         WindowSettings window;

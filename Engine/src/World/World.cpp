@@ -5,6 +5,8 @@
 
 #include <algorithm>
 
+#include "Engine/Math/MathUtils.h"
+
 namespace Engine
 {
     void World::BeginPlay(Application& app)

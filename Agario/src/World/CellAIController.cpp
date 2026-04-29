@@ -1,8 +1,10 @@
+#include "Agario/Config/Settings.h"
 #include "Agario/World/CellAIController.h"
 
 #include "Agario/GameplayTags/GameTags.h"
 #include "Agario/World/AgarioWorld.h"
 #include "Agario/World/Cell.h"
+#include "Engine/Components/MovementComponent.h"
 #include "Engine/Core/DebugSystem.h"
 #include "Engine/GameplayTags/GameTags.h"
 #include "Engine/Math/MathUtils.h"
@@ -10,12 +12,12 @@
 namespace Agario
 {
     CellAIController::CellAIController(const BotSettings &settings)
-        : AIController(settings)
+        : AIController(settings.ai), m_settings(settings.ai)
     {
     }
 
     CellAIController::CellAIController(const BotSettings &settings, Engine::Actor *pawn)
-        : AIController(settings, pawn)
+        : AIController(settings.ai, pawn), m_settings(settings.ai)
     {
     }
 
@@ -44,29 +46,31 @@ namespace Agario
 
         if (m_currentState == Tags::Agario::AI_State_Deciding)
         {
-            if (auto* world = GetWorld<AgarioWorld>())
+            auto* world = GetWorld<AgarioWorld>();
+            if (!world)
             {
-                auto& chunkGrid = world->GetChunkGrid();
-                m_targetPosition = chunkGrid.GetBestFoodChunkPosition(cell->GetActorPosition(), Settings.bots.ai.roamingRadius);
-
-                if (Engine::Math::Distance(m_targetPosition, cell->GetActorPosition()) < GetAcceptableRadius())
-                {
-                    m_targetPosition = GetRandomLocationInRadius(cell->GetActorPosition(), Settings.bots.ai.roamingRadius);
-                }
+                return;
             }
-            else
+            const auto& chunkGrid = world->GetChunkGrid();
+
+            m_targetPosition = chunkGrid.GetBestFoodChunkPositionInRadius(cell->GetActorPosition(), m_settings.roamingRadius);
+
+            if (Engine::Math::Distance(m_targetPosition, cell->GetActorPosition()) < GetAcceptableRadius())
             {
-                m_targetPosition = GetRandomLocationInRadius(cell->GetActorPosition(), Settings.bots.ai.roamingRadius);
+                m_targetPosition = chunkGrid.GetRandomChunkPositionInRadius(cell->GetActorPosition(), m_settings.roamingRadius);
             }
 
             m_currentState = Tags::Agario::AI_State_Roaming;
+            m_retargetTimer = m_settings.retargetInterval;
         }
         if (m_currentState == Tags::Agario::AI_State_Roaming)
         {
             Engine::DebugSystem::DrawLine(cell->GetActorPosition(), m_targetPosition, sf::Color::Cyan);
             Engine::DebugSystem::DrawCircle(m_targetPosition, 10.f, sf::Color::Green);
 
-            if (ReachedPosition(m_targetPosition) || Engine::Math::IsNearlyZero(m_targetPosition))
+            m_retargetTimer -= deltaTime;
+
+            if (ReachedPosition(m_targetPosition) || Engine::Math::IsNearlyZero(m_targetPosition) || m_retargetTimer <= 0.f)
             {
                 m_currentState = Tags::Agario::AI_State_Deciding;
                 return;

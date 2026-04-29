@@ -9,6 +9,7 @@
 #include <cmath>
 #include <filesystem>
 #include <iostream>
+#include <random>
 
 #include "Engine/Core/DebugSystem.h"
 #include "Engine/Math/MathUtils.h"
@@ -134,17 +135,14 @@ namespace Agario
             m_bounds.position.y + (static_cast<float>(row) + .5f) * m_chunkSize.y};
     }
 
-    sf::Vector2f ChunkGrid::GetBestFoodChunkPosition(const sf::Vector2f& center, const float radius) const
+    sf::Vector2f ChunkGrid::GetBestFoodChunkPositionInRadius(const sf::Vector2f& center, const float radius) const
     {
         if (!IsInitialized())
         {
             return center;
         }
 
-        const int startCol = WorldToGridX(center.x - radius);
-        const int startRow = WorldToGridY(center.y - radius);
-        const int endCol = WorldToGridX(center.x + radius);
-        const int endRow = WorldToGridY(center.y + radius);
+        const auto [startCol, startRow, endCol, endRow] = GetGridBounds(center, radius);
 
         float maxFood = -1.f;
         sf::Vector2f bestPos = center;
@@ -168,6 +166,51 @@ namespace Agario
         }
 
         return bestPos;
+    }
+
+    sf::Vector2f ChunkGrid::GetRandomChunkPositionInRadius(const sf::Vector2f &center, float radius) const
+    {
+        if (!IsInitialized())
+        {
+            return center;
+        }
+
+        const auto [startCol, startRow, endCol, endRow] = GetGridBounds(center, radius);
+
+        std::vector<sf::Vector2f> validPositions;
+        const float radiusSq = radius * radius;
+
+        for (int row = startRow; row <= endRow; ++row)
+        {
+            for (int col = startCol; col <= endCol; ++col)
+            {
+                const sf::Vector2f chunkCenter = GetChunkCenter(col, row);
+                if (Engine::Math::DistanceSquared(chunkCenter, center) <= radiusSq)
+                {
+                    validPositions.push_back(chunkCenter);
+                    Engine::DebugSystem::DrawCircle(chunkCenter, 10.f, sf::Color::Green, 1, 32, 1);
+                }
+            }
+        }
+
+        if (validPositions.empty())
+        {
+            return center;
+        }
+
+        static std::mt19937 rng{std::random_device{}()};
+        std::uniform_int_distribution<std::size_t> dist(0, validPositions.size() - 1);
+        return validPositions[dist(rng)];
+    }
+
+    GridBounds ChunkGrid::GetGridBounds(const sf::Vector2f& center, const float radius) const
+    {
+        return {
+            WorldToGridX(center.x - radius),
+            WorldToGridY(center.y - radius),
+            WorldToGridX(center.x + radius),
+            WorldToGridY(center.y + radius)
+        };
     }
 
     int ChunkGrid::GetChunkIndex(const sf::Vector2f& worldPosition) const

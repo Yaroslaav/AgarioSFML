@@ -38,4 +38,9 @@ namespace Engine::Math
         return std::sqrt(DistanceSquared(a, b));
     }
 
+    inline sf::Vector2f ForwardVector(const sf::Vector2f vector)
+    {
+        return NormalizeOrZero(vector);
+    }
+
 }

@@ -23,7 +23,7 @@ namespace Agario
         sf::Vector2f spawnPosition{640.f, 360.f};
     };
 
-    struct BotAISettings
+    struct BotAISettings : Engine::AIControllerSettings
     {
         float roamingRadius = 500.f;
         float retargetInterval = 1.5f;

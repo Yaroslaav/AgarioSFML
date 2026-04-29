@@ -25,6 +25,14 @@ namespace Agario
         float enemyMass = 0.f;
     };
 
+    struct GridBounds
+    {
+        int startCol;
+        int startRow;
+        int endCol;
+        int endRow;
+    };
+
     class ChunkGrid
     {
     public:
@@ -52,9 +60,11 @@ namespace Agario
         }
 
         [[nodiscard]] sf::Vector2f GetChunkCenter(int col, int row) const;
-        [[nodiscard]] sf::Vector2f GetBestFoodChunkPosition(const sf::Vector2f& center, float radius) const;
+        [[nodiscard]] sf::Vector2f GetBestFoodChunkPositionInRadius(const sf::Vector2f& center, float radius) const;
+        [[nodiscard]] sf::Vector2f GetRandomChunkPositionInRadius(const sf::Vector2f& center, float radius) const;
 
     private:
+        [[nodiscard]] GridBounds GetGridBounds(const sf::Vector2f& center, float radius) const;
         [[nodiscard]] int WorldToGridX(float x) const;
         [[nodiscard]] int WorldToGridY(float y) const;
         [[nodiscard]] int GetChunkIndex(const sf::Vector2f& worldPosition) const;
