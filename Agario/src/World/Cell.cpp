@@ -6,19 +6,20 @@
 
 namespace Agario
 {
-    Cell::Cell(const PlayerSettings& settings, const sf::Vector2f& startPosition, const ConsumeSettings& consumeSettings)
-        : Cell(consumeSettings.radiusPerMass, settings.color, startPosition, settings.maxSpeed, settings.startMass, consumeSettings)
+    Cell::Cell(const PlayerSettings& settings, const sf::Vector2f& startPosition, const ConsumeSettings& consumeSettings, const int teamId)
+        : Cell(consumeSettings.radiusPerMass, settings.color, startPosition, settings.maxSpeed, settings.startMass, consumeSettings, teamId)
     {
     }
 
-    Cell::Cell(const BotSettings& settings, const sf::Vector2f& startPosition, const ConsumeSettings& consumeSettings)
-        : Cell(consumeSettings.radiusPerMass, settings.color, startPosition, settings.maxSpeed, settings.startMass, consumeSettings)
+    Cell::Cell(const BotSettings& settings, const sf::Vector2f& startPosition, const ConsumeSettings& consumeSettings, const int teamId)
+        : Cell(consumeSettings.radiusPerMass, settings.color, startPosition, settings.maxSpeed, settings.startMass, consumeSettings, teamId)
     {
     }
 
     Cell::Cell(const float radiusPerMass, const sf::Color& color, const sf::Vector2f& startPosition, const float maxSpeed,
-        const float startMass, const ConsumeSettings& consumeSettings) :
-        CircleActor(0.f, color, startPosition)
+        const float startMass, const ConsumeSettings& consumeSettings, const int teamId) :
+        CircleActor(0.f, color, startPosition),
+        m_teamId(teamId)
     {
         auto* movementComponent = AddComponent<Engine::MovementComponent>();
         movementComponent->SetMaxSpeed(maxSpeed);

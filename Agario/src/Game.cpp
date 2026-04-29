@@ -4,6 +4,7 @@
 #include "Agario/World/Cell.h"
 #include "Agario/World/Food.h"
 #include "Engine/Core/Application.h"
+#include "Engine/Math/MathUtils.h"
 #include "Engine/View/Camera.h"
 #include "Engine/World/Controller/AIController.h"
 #include "Engine/World/Controller/PlayerController.h"
@@ -31,14 +32,16 @@ namespace Agario
         Cell* playerCell = m_world.SpawnActor<Cell>(
             Settings.player,
             Settings.player.spawnPosition,
-            Settings.gameplay.consume);
+            Settings.gameplay.consume,
+            0);
 
         for (int i = 0; i < Settings.bots.count; ++i)
         {
             auto* botCell = m_world.SpawnActor<Cell>(
                 Settings.bots,
                 m_world.GetRandomPositionInBounds(Settings.bots.spawnPadding),
-                Settings.gameplay.consume);
+                Settings.gameplay.consume,
+                i+1);
 
             m_world.SpawnActor<CellAIController>(Settings.bots, botCell);
         }
@@ -120,31 +123,62 @@ namespace Agario
                 Cell* otherPlayer = players[otherPlayerIndex];
                 if (!otherPlayer->IsActive()) continue;
 
-                Cell* largerPlayer = player;
-                Cell* smallerPlayer = otherPlayer;
-
-                if (otherPlayer->GetMass() > player->GetMass())
+                if (player->GetTeamId() != -1 && player->GetTeamId() == otherPlayer->GetTeamId())
                 {
-                    largerPlayer = otherPlayer;
-                    smallerPlayer = player;
+                    ResolveTeamCollision(player, otherPlayer);
                 }
-
-                if (!largerPlayer->CanConsume(*smallerPlayer))
+                else
                 {
-                    continue;
+                    ResolveEnemyCollision(player, otherPlayer);
                 }
-
-                auto* largerCollision = largerPlayer->GetCollision();
-                auto* smallerCollision = smallerPlayer->GetCollision();
-                if (!largerCollision->FullyCovers(*smallerCollision))
-                {
-                    continue;
-                }
-
-                largerPlayer->Grow(smallerPlayer->GetMass() * Settings.gameplay.consume.massGainFactor);
-                smallerPlayer->Die(*largerPlayer);
-                largerCollision->OnBeginOverlap.Broadcast(smallerPlayer, smallerCollision);
             }
         }
+    }
+
+    void Game::ResolveTeamCollision(Cell* cellA, Cell* cellB)
+    {
+        const sf::Vector2f centerA = cellA->GetCollision()->GetWorldCenter();
+        const sf::Vector2f centerB = cellB->GetCollision()->GetWorldCenter();
+
+        const float minDistance = cellA->GetRadius() + cellB->GetRadius();
+        const float distSq = Engine::Math::DistanceSquared(centerA, centerB);
+
+        if (distSq < minDistance * minDistance && distSq > 0.f)
+        {
+            const float dist = std::sqrt(distSq);
+            const sf::Vector2f normal = (centerA - centerB) / dist;
+            const sf::Vector2f separation = normal * ((minDistance - dist) * .5f);
+
+            cellA->GetTransform().Move(separation);
+            cellB->GetTransform().Move(-separation);
+        }
+    }
+
+    void Game::ResolveEnemyCollision(Cell* cellA, Cell* cellB)
+    {
+        Cell* largerPlayer = cellA;
+        Cell* smallerPlayer = cellB;
+
+        if (cellB->GetMass() > cellA->GetMass())
+        {
+            largerPlayer = cellB;
+            smallerPlayer = cellA;
+        }
+
+        if (!largerPlayer->CanConsume(*smallerPlayer))
+        {
+            return;
+        }
+
+        auto* largerCollision = largerPlayer->GetCollision();
+        auto* smallerCollision = smallerPlayer->GetCollision();
+        if (!largerCollision->FullyCovers(*smallerCollision))
+        {
+            return;
+        }
+
+        largerPlayer->Grow(smallerPlayer->GetMass() * Settings.gameplay.consume.massGainFactor);
+        smallerPlayer->Die(*largerPlayer);
+        largerCollision->OnBeginOverlap.Broadcast(smallerPlayer, smallerCollision);
     }
 }
