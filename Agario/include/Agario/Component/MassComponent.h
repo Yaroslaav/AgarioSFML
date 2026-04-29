@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Agario/Config/Settings.h"
 #include "Engine/Components/ActorComponent.h"
 
 namespace Agario
@@ -9,7 +10,7 @@ namespace Agario
     class MassComponent : public Engine::ActorComponent
     {
     public:
-        explicit MassComponent(float startMass, float initialRadius, float consumeThresholdRatio);
+        explicit MassComponent(float startMass, float initialRadius, const ConsumeSettings& consumeSettings);
 
         void BeginPlay(Engine::Application& app) override;
 

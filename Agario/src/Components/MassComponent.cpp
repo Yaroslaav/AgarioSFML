@@ -8,11 +8,11 @@
 
 namespace Agario
 {
-    MassComponent::MassComponent(const float startMass, const float initialRadius, const float consumeThresholdRatio) :
+    MassComponent::MassComponent(const float startMass, const float initialRadius, const ConsumeSettings& consumeSettings) :
         m_initialMass(std::max(startMass, 0.01f)),
         m_currentMass(m_initialMass),
-        m_radiusPerRootMass(initialRadius / std::sqrt(m_initialMass)),
-        m_consumeThresholdRatio(consumeThresholdRatio)
+        m_radiusPerRootMass(consumeSettings.radiusPerMass),
+        m_consumeThresholdRatio(consumeSettings.thresholdRatio)
     {
     }
 

@@ -48,7 +48,7 @@ namespace Agario
             {
                 auto& chunkGrid = world->GetChunkGrid();
                 m_targetPosition = chunkGrid.GetBestFoodChunkPosition(cell->GetActorPosition(), Settings.bots.ai.roamingRadius);
-                
+
                 if (Engine::Math::Distance(m_targetPosition, cell->GetActorPosition()) < GetAcceptableRadius())
                 {
                     m_targetPosition = GetRandomLocationInRadius(cell->GetActorPosition(), Settings.bots.ai.roamingRadius);
@@ -58,7 +58,7 @@ namespace Agario
             {
                 m_targetPosition = GetRandomLocationInRadius(cell->GetActorPosition(), Settings.bots.ai.roamingRadius);
             }
-            
+
             m_currentState = Tags::Agario::AI_State_Roaming;
         }
         if (m_currentState == Tags::Agario::AI_State_Roaming)
@@ -73,6 +73,23 @@ namespace Agario
             }
 
             movementComponent->AddInputVector(Engine::Math::NormalizeOrZero(m_targetPosition - cell->GetActorPosition()));
+        }
+    }
+
+    void CellAIController::OnPossess(Actor &pawn)
+    {
+        m_onPawnDeathEventHandle = GetPawn<Cell>()->OnDeath.AddListener([this](Actor* causer) mutable
+        {
+            m_currentState = Tags::Agario::AI_State_Deciding;
+            m_targetPosition = {0.f, 0.f};
+        });
+    }
+
+    void CellAIController::OnUnPossess()
+    {
+        if (auto* cell = GetPawn<Cell>())
+        {
+            cell->OnDeath.RemoveListener(m_onPawnDeathEventHandle);
         }
     }
 }

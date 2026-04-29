@@ -18,10 +18,11 @@ namespace Engine
     }
 
     AIController::AIController(const Agario::BotSettings &settings, Actor *pawn)
-        : AIController(settings)
+        : Controller(pawn)
     {
-        Possess(*pawn);
+        SetAcceptableRadius(settings.ai.acceptableRadius);
     }
+
 
     sf::Vector2f AIController::GetRandomLocationInRadius(const sf::Vector2f& center, float radius)
     {

@@ -31,14 +31,14 @@ namespace Agario
         Cell* playerCell = m_world.SpawnActor<Cell>(
             Settings.player,
             Settings.player.spawnPosition,
-            Settings.gameplay.consume.thresholdRatio);
+            Settings.gameplay.consume);
 
         for (int i = 0; i < Settings.bots.count; ++i)
         {
             auto* botCell = m_world.SpawnActor<Cell>(
                 Settings.bots,
                 m_world.GetRandomPositionInBounds(Settings.bots.spawnPadding),
-                Settings.gameplay.consume.thresholdRatio);
+                Settings.gameplay.consume);
 
             m_world.SpawnActor<CellAIController>(Settings.bots, botCell);
         }
@@ -50,8 +50,7 @@ namespace Agario
                 m_world.GetRandomPositionInBounds(Settings.food.spawnPadding));
         }
 
-        auto* playerController = m_world.SpawnActor<Engine::PlayerController>();
-        playerController->Possess(*playerCell);
+        auto* playerController = m_world.SpawnActor<Engine::PlayerController>(playerCell);
         auto* camera = m_world.SpawnActor<Engine::Camera>(
             Settings.player.spawnPosition,
             static_cast<sf::Vector2f>(app.GetWindow().GetSize()));
@@ -137,9 +136,7 @@ namespace Agario
                 }
 
                 largerPlayer->Grow(smallerPlayer->GetMass() * Settings.gameplay.consume.massGainFactor);
-                smallerPlayer->GetTransform().SetPosition(m_world.GetRandomPositionInBounds(smallerPlayer->GetRadius()));
-                smallerPlayer->ResetMass();
-                smallerCollision->OnBeginOverlap.Broadcast(largerPlayer, largerCollision);
+                smallerPlayer->Die(*largerPlayer);
                 largerCollision->OnBeginOverlap.Broadcast(smallerPlayer, smallerCollision);
             }
         }

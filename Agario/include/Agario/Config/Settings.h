@@ -12,12 +12,12 @@ namespace Agario
     {
         float thresholdRatio = 0.8f;
         float massGainFactor = 0.4f;
+        float radiusPerMass = 5.f;
     };
 
     struct PlayerSettings
     {
-        float radius = 30.f;
-        float startMass = 5.f;
+        float startMass = 100.f;
         float maxSpeed = 250.f;
         sf::Color color = sf::Color::White;
         sf::Vector2f spawnPosition{640.f, 360.f};
@@ -33,8 +33,7 @@ namespace Agario
     struct BotSettings
     {
         int count = 1;
-        float radius = 30.f;
-        float startMass = 5.f;
+        float startMass = 10.f;
         float maxSpeed = 180.f;
         float spawnPadding = 32.f;
         sf::Color color{120, 220, 120};
@@ -43,7 +42,7 @@ namespace Agario
 
     struct FoodSettings
     {
-        int count = 2000;
+        int count = 10000;
         float mass = .05f;
         float spawnPadding = 12.f;
         float radius = 2.f;

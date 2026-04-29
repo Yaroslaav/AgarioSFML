@@ -9,9 +9,9 @@ namespace Agario
     class Cell : public CircleActor
     {
     public:
-        Cell(float radius, const sf::Color& color, const sf::Vector2f& startPosition, float maxSpeed, float startMass, float consumeThresholdRatio);
-        Cell(const PlayerSettings& settings, const sf::Vector2f& startPosition, float consumeThresholdRatio);
-        Cell(const BotSettings& settings, const sf::Vector2f& startPosition, float consumeThresholdRatio);
+        Cell(float radiusPerMass, const sf::Color& color, const sf::Vector2f& startPosition, float maxSpeed, float startMass, const ConsumeSettings& consumeSettings);
+        Cell(const PlayerSettings& settings, const sf::Vector2f& startPosition, const ConsumeSettings& consumeSettings);
+        Cell(const BotSettings& settings, const sf::Vector2f& startPosition, const ConsumeSettings& consumeSettings);
 
         void Grow(float amount);
         [[nodiscard]] float GetMass() const
@@ -27,6 +27,9 @@ namespace Agario
         {
             return m_massComponent->CanConsume(other.GetMass());
         }
+
+        void Die(Actor& causer);
+        Engine::Event<Actor*> OnDeath;
 
     private:
         MassComponent* m_massComponent = nullptr;
