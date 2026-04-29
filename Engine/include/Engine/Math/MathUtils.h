@@ -1,10 +1,22 @@
 #pragma once
-#include <complex>
+#include <cmath>
 
 #include "SFML/System/Vector2.hpp"
 
 namespace Engine::Math
 {
+    inline constexpr float PI = 3.14159265358979323846f;
+
+    inline constexpr float RadiansToDegrees(const float radians)
+    {
+        return radians * 180.f / PI;
+    }
+
+    inline constexpr float DegreesToRadians(const float degrees)
+    {
+        return degrees * PI / 180.f;
+    }
+
     inline bool IsNearlyZero(const float value, const float eps = 0.0001f)
     {
         return std::abs(value) <= eps;
@@ -42,5 +54,4 @@ namespace Engine::Math
     {
         return NormalizeOrZero(vector);
     }
-
 }

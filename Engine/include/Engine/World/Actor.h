@@ -63,6 +63,14 @@ namespace Engine
 
             for (const auto& component : m_components)
             {
+                if (component->IsA<T>())
+                {
+                    return static_cast<T*>(component.get());
+                }
+            }
+
+            for (const auto& component : m_components)
+            {
                 if (auto* ptr = dynamic_cast<T*>(component.get()))
                 {
                     return ptr;
@@ -71,9 +79,10 @@ namespace Engine
             return nullptr;
         }
 
-        [[nodiscard]] std::type_index GetType()
+        template<typename T>
+        [[nodiscard]] bool IsA() const
         {
-            return typeid(*this);
+            return std::type_index(typeid(*this)) == std::type_index(typeid(T));
         }
 
         [[nodiscard]] const sf::Vector2f& GetActorPosition() const

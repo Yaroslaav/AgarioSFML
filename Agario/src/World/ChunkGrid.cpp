@@ -150,15 +150,16 @@ namespace Agario
 
         for (int row = startRow; row <= endRow; ++row)
         {
+            const int rowOffset = row * m_columns;
             for (int col = startCol; col <= endCol; ++col)
             {
                 const sf::Vector2f chunkCenter = GetChunkCenter(col, row);
                 if (Engine::Math::DistanceSquared(chunkCenter, center) <= radiusSq)
                 {
-                    const int chunkIndex = row * m_columns + col;
-                    if (m_chunks[chunkIndex].foodMass > maxFood)
+                    const float foodMass = m_chunks[rowOffset + col].foodMass;
+                    if (foodMass > maxFood)
                     {
-                        maxFood = m_chunks[chunkIndex].foodMass;
+                        maxFood = foodMass;
                         bestPos = chunkCenter;
                     }
                 }
@@ -178,6 +179,7 @@ namespace Agario
         const auto [startCol, startRow, endCol, endRow] = GetGridBounds(center, radius);
 
         std::vector<sf::Vector2f> validPositions;
+        validPositions.reserve((endCol - startCol + 1) * (endRow - startRow + 1));
         const float radiusSq = radius * radius;
 
         for (int row = startRow; row <= endRow; ++row)
@@ -188,7 +190,6 @@ namespace Agario
                 if (Engine::Math::DistanceSquared(chunkCenter, center) <= radiusSq)
                 {
                     validPositions.push_back(chunkCenter);
-                    Engine::DebugSystem::DrawCircle(chunkCenter, 10.f, sf::Color::Green, 1, 32, 1);
                 }
             }
         }

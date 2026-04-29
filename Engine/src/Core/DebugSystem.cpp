@@ -1,6 +1,7 @@
 #include "Engine/Core/DebugSystem.h"
 #include "Engine/Core/Application.h"
 #include "Engine/View/Window.h"
+#include "Engine/Math/MathUtils.h"
 #include <SFML/Graphics/VertexArray.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <cmath>
@@ -75,7 +76,7 @@ namespace Engine
         shape.setFillColor(line.color);
         shape.setOrigin({0.f, line.thickness / 2.f});
         
-        shape.setRotation(sf::degrees(std::atan2(direction.y, direction.x) * 180.f / M_PI));
+        shape.setRotation(sf::degrees(Math::RadiansToDegrees(std::atan2(direction.y, direction.x))));
         
         return shape;
     }

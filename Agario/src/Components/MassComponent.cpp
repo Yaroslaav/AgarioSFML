@@ -19,7 +19,7 @@ namespace Agario
     void MassComponent::BeginPlay(Engine::Application& app)
     {
         ActorComponent::BeginPlay(app);
-        m_ownerCircleActor = dynamic_cast<CircleActor*>(GetOwner());
+        m_ownerCircleActor = static_cast<CircleActor*>(GetOwner());
         ApplyRadius();
     }
 

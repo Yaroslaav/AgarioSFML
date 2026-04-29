@@ -97,10 +97,14 @@ namespace Agario
         for (std::size_t playerIndex = 0; playerIndex < players.size(); ++playerIndex)
         {
             Cell* player = players[playerIndex];
+            if (!player->IsActive()) continue;
+
             auto* playerCollision = player->GetCollision();
 
             for (auto* foodCell : food)
             {
+                if (!foodCell->IsActive()) continue;
+
                 auto* foodCellCollision = foodCell->GetCollision();
                 if (playerCollision->FullyCovers(*foodCellCollision))
                 {
@@ -114,6 +118,8 @@ namespace Agario
             for (std::size_t otherPlayerIndex = playerIndex + 1; otherPlayerIndex < players.size(); ++otherPlayerIndex)
             {
                 Cell* otherPlayer = players[otherPlayerIndex];
+                if (!otherPlayer->IsActive()) continue;
+
                 Cell* largerPlayer = player;
                 Cell* smallerPlayer = otherPlayer;
 
