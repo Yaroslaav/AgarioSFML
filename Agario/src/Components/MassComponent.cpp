@@ -11,8 +11,7 @@ namespace Agario
     MassComponent::MassComponent(const float startMass, const float initialRadius, const ConsumeSettings& consumeSettings) :
         m_initialMass(std::max(startMass, 0.01f)),
         m_currentMass(m_initialMass),
-        m_radiusPerRootMass(consumeSettings.radiusPerMass),
-        m_consumeThresholdRatio(consumeSettings.thresholdRatio)
+        m_consumeSettings(consumeSettings)
     {
     }
 
@@ -25,7 +24,13 @@ namespace Agario
 
     void MassComponent::AddMass(const float amount)
     {
-        m_currentMass = std::max(0.01f, m_currentMass + amount);
+        m_currentMass = std::max(0.f, m_currentMass + amount);
+        ApplyRadius();
+    }
+
+    void MassComponent::SetMass(const float amount)
+    {
+        m_currentMass = std::max(0.f, amount);
         ApplyRadius();
     }
 
@@ -42,6 +47,6 @@ namespace Agario
             return;
         }
 
-        m_ownerCircleActor->SetRadius(m_radiusPerRootMass * std::sqrt(m_currentMass));
+        m_ownerCircleActor->SetRadius(m_consumeSettings.radiusPerMass * std::sqrt(m_currentMass));
     }
 }

@@ -1,13 +1,13 @@
 #pragma once
+#include "Agario/World/AgarioController.h"
 #include "Engine/GameplayTags/GameplayTag.h"
 #include "Engine/Helpers/Event.h"
-#include "Engine/World/Controller/AIController.h"
 
 namespace Agario
 {
     class Cell;
 
-    class CellAIController : public Engine::AIController
+    class CellAIController : public AgarioController
     {
     public:
         CellAIController() = default;
@@ -19,8 +19,8 @@ namespace Agario
         void Tick(Engine::Application &app, float deltaTime) override;
 
     protected:
-        void OnPossess(Actor &pawn) override;
-        void OnUnPossess() override;
+        void OnCellPossessed(Cell& cell) override;
+        void OnCellUnPossessed(Cell& cell) override;
 
     private:
         BotAISettings m_settings;

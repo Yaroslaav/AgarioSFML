@@ -11,12 +11,18 @@ add_executable(Agario
         include/Agario/GameplayTags/GameTags.h
         include/Agario/World/Food.h
         src/World/Food.cpp
+        include/Agario/World/AgarioController.h
+        src/World/AgarioController.cpp
         include/Agario/World/CellAIController.h
         src/World/CellAIController.cpp
+        include/Agario/World/ControlledCellGroup.h
+        src/World/ControlledCellGroup.cpp
         include/Agario/World/AgarioWorld.h
         src/World/AgarioWorld.cpp
         include/Agario/World/ChunkGrid.h
         src/World/ChunkGrid.cpp
+        include/Agario/World/AgarioPlayerController.h
+        src/World/AgarioPlayerController.cpp
 )
 
 target_include_directories(Agario PUBLIC

@@ -11,12 +11,12 @@ namespace Engine
 {
     void World::BeginPlay(Application& app)
     {
-        FlushPendingActors();
+        FlushPendingActors(app);
 
-        for (const auto& actor : m_actors)
-        {
-            actor->BeginPlay(app);
-        }
+        // for (const auto& actor : m_actors)
+        // {
+        //     actor->BeginPlay(app);
+        // }
 
         SyncActiveCamera(app);
     }
@@ -36,7 +36,7 @@ namespace Engine
 
     void World::Tick(Application& app, const float deltaTime)
     {
-        FlushPendingActors();
+        FlushPendingActors(app);
 
         for (const auto& actor : m_actors)
         {
@@ -76,7 +76,7 @@ namespace Engine
         }
     }
 
-    void World::FlushPendingActors()
+    void World::FlushPendingActors(Application& app)
     {
         if (m_pendingActors.empty())
         {
@@ -85,6 +85,7 @@ namespace Engine
 
         for (auto& actor : m_pendingActors)
         {
+            actor->BeginPlay(app);
             m_actors.push_back(std::move(actor));
         }
 

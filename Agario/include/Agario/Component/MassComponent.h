@@ -15,6 +15,7 @@ namespace Agario
         void BeginPlay(Engine::Application& app) override;
 
         void AddMass(float amount);
+        void SetMass(float amount);
 
         [[nodiscard]] float GetMass() const
         {
@@ -23,18 +24,25 @@ namespace Agario
 
         [[nodiscard]] bool CanConsume(float otherMass) const
         {
-            return otherMass <= m_currentMass * m_consumeThresholdRatio;
+            return otherMass <= m_currentMass * m_consumeSettings.thresholdRatio;
+        }
+
+        [[nodiscard]] ConsumeSettings GetConsumeSettings() const
+        {
+            return m_consumeSettings;
         }
 
         void Reset();
-
+        void RecalculateRadius() const
+        {
+            ApplyRadius();
+        }
     private:
         void ApplyRadius() const;
 
         float m_initialMass = 0.f;
         float m_currentMass = 0.f;
-        float m_radiusPerRootMass = 0.f;
-        float m_consumeThresholdRatio = 0.8f;
+        ConsumeSettings m_consumeSettings;
         CircleActor* m_ownerCircleActor = nullptr;
     };
 }

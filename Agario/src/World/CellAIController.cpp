@@ -4,7 +4,6 @@
 #include "Agario/GameplayTags/GameTags.h"
 #include "Agario/World/AgarioWorld.h"
 #include "Agario/World/Cell.h"
-#include "Engine/Components/MovementComponent.h"
 #include "Engine/Core/DebugSystem.h"
 #include "Engine/GameplayTags/GameTags.h"
 #include "Engine/Math/MathUtils.h"
@@ -12,34 +11,30 @@
 namespace Agario
 {
     CellAIController::CellAIController(const BotSettings &settings)
-        : AIController(settings.ai), m_settings(settings.ai)
+        : m_settings(settings.ai)
     {
+        SetAcceptableRadius(settings.ai.acceptableRadius);
     }
 
     CellAIController::CellAIController(const BotSettings &settings, Engine::Actor *pawn)
-        : AIController(settings.ai, pawn), m_settings(settings.ai)
+        : AgarioController(pawn), m_settings(settings.ai)
     {
+        SetAcceptableRadius(settings.ai.acceptableRadius);
     }
 
     void CellAIController::BeginPlay(Engine::Application &app)
     {
-        AIController::BeginPlay(app);
+        AgarioController::BeginPlay(app);
 
         m_currentState = Tags::Agario::AI_State_Deciding;
     }
 
     void CellAIController::Tick(Engine::Application &app, const float deltaTime)
     {
-        AIController::Tick(app, deltaTime);
+        AgarioController::Tick(app, deltaTime);
 
-        Cell* cell = GetPawn<Cell>();
+        Cell* cell = GetPrimaryCell();
         if (cell == nullptr || !cell->IsActive())
-        {
-            return;
-        }
-
-        auto* movementComponent = cell->GetComponent<Engine::MovementComponent>();
-        if (movementComponent == nullptr)
         {
             return;
         }
@@ -76,24 +71,21 @@ namespace Agario
                 return;
             }
 
-            movementComponent->AddInputVector(Engine::Math::NormalizeOrZero(m_targetPosition - cell->GetActorPosition()));
+            MoveControlledCellsToward(m_targetPosition);
         }
     }
 
-    void CellAIController::OnPossess(Actor &pawn)
+    void CellAIController::OnCellPossessed(Cell& cell)
     {
-        m_onPawnDeathEventHandle = GetPawn<Cell>()->OnDeath.AddListener([this](Actor* causer) mutable
+        m_onPawnDeathEventHandle = cell.OnDeath.AddListener([this](Actor* causer) mutable
         {
             m_currentState = Tags::Agario::AI_State_Deciding;
             m_targetPosition = {0.f, 0.f};
         });
     }
 
-    void CellAIController::OnUnPossess()
+    void CellAIController::OnCellUnPossessed(Cell& cell)
     {
-        if (auto* cell = GetPawn<Cell>())
-        {
-            cell->OnDeath.RemoveListener(m_onPawnDeathEventHandle);
-        }
+        cell.OnDeath.RemoveListener(m_onPawnDeathEventHandle);
     }
 }

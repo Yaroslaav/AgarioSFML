@@ -1,13 +1,12 @@
 #include "Agario/Game.h"
 
 #include "Agario/Config/Settings.h"
+#include "Agario/World/AgarioPlayerController.h"
 #include "Agario/World/Cell.h"
 #include "Agario/World/Food.h"
 #include "Engine/Core/Application.h"
 #include "Engine/Math/MathUtils.h"
 #include "Engine/View/Camera.h"
-#include "Engine/World/Controller/AIController.h"
-#include "Engine/World/Controller/PlayerController.h"
 
 #include "Agario/World/CellAIController.h"
 
@@ -53,7 +52,7 @@ namespace Agario
                 m_world.GetRandomPositionInBounds(Settings.food.spawnPadding));
         }
 
-        auto* playerController = m_world.SpawnActor<Engine::PlayerController>(playerCell);
+        m_world.SpawnActor<AgarioPlayerController>(playerCell);
         auto* camera = m_world.SpawnActor<Engine::Camera>(
             Settings.player.spawnPosition,
             static_cast<sf::Vector2f>(app.GetWindow().GetSize()));
@@ -147,7 +146,7 @@ namespace Agario
         {
             const float dist = std::sqrt(distSq);
             const sf::Vector2f normal = (centerA - centerB) / dist;
-            const sf::Vector2f separation = normal * ((minDistance - dist) * .5f);
+            const sf::Vector2f separation = normal * ((minDistance - dist) * 1.f);
 
             cellA->GetTransform().Move(separation);
             cellB->GetTransform().Move(-separation);

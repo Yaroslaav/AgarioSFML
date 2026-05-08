@@ -33,8 +33,8 @@ namespace Agario
             return m_shape;
         }
 
-    private:
         sf::CircleShape m_shape;
         Engine::SphereCollisionComponent* m_collision = nullptr;
+        float m_radiusMultiplier = 1.f;
     };
 }

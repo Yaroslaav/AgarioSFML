@@ -23,11 +23,11 @@ namespace Agario
         sf::Vector2f spawnPosition{640.f, 360.f};
     };
 
-    struct BotAISettings : Engine::AIControllerSettings
+    struct BotAISettings
     {
+        float acceptableRadius = 4.f;
         float roamingRadius = 500.f;
         float retargetInterval = 1.5f;
-        float acceptableRadius = 4.f;
     };
 
     struct BotSettings
@@ -43,7 +43,7 @@ namespace Agario
     struct FoodSettings
     {
         int count = 10000;
-        float mass = .05f;
+        float mass = .5f;
         float spawnPadding = 12.f;
         float radius = 2.f;
         sf::Color color{255, 210, 70};

@@ -30,6 +30,7 @@ namespace Engine
         sf::Keyboard::Key quitKey = sf::Keyboard::Key::Escape;
         sf::Keyboard::Key zoomInKey = sf::Keyboard::Key::Equal;
         sf::Keyboard::Key zoomOutKey = sf::Keyboard::Key::Hyphen;
+        sf::Keyboard::Key playerSplitKey = sf::Keyboard::Key::Space;
         float zoomInFactor = 0.9f;
         float zoomOutFactor = 1.1f;
     };
@@ -37,11 +38,6 @@ namespace Engine
     struct DebugSettings
     {
         bool startDebugMode = false;
-    };
-
-    struct AIControllerSettings
-    {
-        float acceptableRadius = 4.f;
     };
 
     struct AppSettings

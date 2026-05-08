@@ -95,7 +95,7 @@ namespace Engine
         bool m_hasBounds = false;
         std::mt19937 m_randomEngine{std::random_device{}()};
 
-        void FlushPendingActors();
+        void FlushPendingActors(Application& app);
         void SyncActiveCamera(Application& app) const;
         void ConstrainActorsToBounds() const;
     };
