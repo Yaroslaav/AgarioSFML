@@ -1,4 +1,5 @@
 #pragma once
+#include <algorithm>
 #include <cmath>
 
 #include "SFML/System/Vector2.hpp"
@@ -26,19 +27,6 @@ namespace Engine::Math
     {
         return std::abs(value.x) <= eps && std::abs(value.y) <= eps;
     }
-
-    inline sf::Vector2f NormalizeOrZero(const sf::Vector2f vector)
-    {
-        const float lengthSquared = vector.x * vector.x + vector.y * vector.y;
-        if (lengthSquared <= 0.f)
-        {
-            return {};
-        }
-
-        const float inverseLength = 1.f / std::sqrt(lengthSquared);
-        return {vector.x * inverseLength, vector.y * inverseLength};
-    }
-
     inline float DistanceSquared(const sf::Vector2f a, const sf::Vector2f b)
     {
         const sf::Vector2f diff = a - b;
@@ -49,9 +37,64 @@ namespace Engine::Math
     {
         return std::sqrt(DistanceSquared(a, b));
     }
+    inline float LengthSquared(const sf::Vector2f a)
+    {
+        return a.x * a.x + a.y * a.y;
+    }
+
+    inline float Length(const sf::Vector2f a)
+    {
+        return std::sqrt(LengthSquared(a));
+    }
+    inline sf::Vector2f NormalizeOrZero(const sf::Vector2f vector)
+    {
+        const float lengthSquared = LengthSquared(vector);
+        if (lengthSquared <= 0.f)
+        {
+            return {};
+        }
+
+        const float inverseLength = 1.f / std::sqrt(lengthSquared);
+        return {vector.x * inverseLength, vector.y * inverseLength};
+    }
+
 
     inline sf::Vector2f ForwardVector(const sf::Vector2f vector)
     {
         return NormalizeOrZero(vector);
+    }
+    inline sf::Vector2f ClampLength(const sf::Vector2f vector, const float maxLength)
+    {
+        if (maxLength <= 0.f)
+        {
+            return {};
+        }
+
+        const float lengthSquared = LengthSquared(vector);
+        if (lengthSquared <= maxLength * maxLength)
+        {
+            return vector;
+        }
+
+        const float scale = maxLength / std::sqrt(lengthSquared);
+        return {vector.x * scale, vector.y * scale};
+    }
+
+    inline sf::Vector2f MoveTowardZero(const sf::Vector2f vector, const float maxDelta)
+    {
+        const float length = Length(vector);
+        if (length <= 0.f || maxDelta <= 0.f)
+        {
+            return vector;
+        }
+
+        const float newLength = std::max(0.f, length - maxDelta);
+        if (newLength <= 0.f)
+        {
+            return {};
+        }
+
+        const float scale = newLength / length;
+        return {vector.x * scale, vector.y * scale};
     }
 }

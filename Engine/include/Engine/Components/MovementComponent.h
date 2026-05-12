@@ -9,26 +9,33 @@ namespace Engine
     class MovementComponent : public ActorComponent
     {
     public:
-        void AddInputVector(const sf::Vector2f& input)
-        {
-            m_pendingInput.x += input.x;
-            m_pendingInput.y += input.y;
-        }
+        void AddInputVector(const sf::Vector2f& input);
 
         void Tick(Application& app, float deltaTime) override;
 
-        void SetMaxSpeed(const float maxSpeed)
-        {
-            m_maxSpeed = maxSpeed;
-        }
+        void SetVelocity(const sf::Vector2f& velocity);
 
-        [[nodiscard]] float GetMaxSpeed() const
-        {
-            return m_maxSpeed;
-        }
+        [[nodiscard]] const sf::Vector2f& GetVelocity() const;
+
+        void Stop();
+
+        void SetMaxSpeed(float maxSpeed);
+
+        [[nodiscard]] float GetMaxSpeed() const;
+
+        void SetAcceleration(float acceleration);
+
+        [[nodiscard]] float GetAcceleration() const;
+
+        void SetBrakingDeceleration(float brakingDeceleration);
+
+        [[nodiscard]] float GetBrakingDeceleration() const;
 
     private:
         sf::Vector2f m_pendingInput{};
+        sf::Vector2f m_velocity{};
         float m_maxSpeed = 250.f;
+        float m_acceleration = 1400.f;
+        float m_brakingDeceleration = 1800.f;
     };
 }

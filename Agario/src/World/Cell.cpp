@@ -68,10 +68,12 @@ namespace Agario
         if (isLastActiveCellInGroup)
         {
             ResetMass();
+            m_movementComponent->Stop();
             GetTransform().SetPosition(GetWorld<AgarioWorld>()->GetRandomPositionInBounds(GetRadius()));
         }
         else
         {
+            m_movementComponent->Stop();
             SetActive(false);
         }
 

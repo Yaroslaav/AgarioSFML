@@ -142,15 +142,17 @@ namespace Agario
         const float minDistance = cellA->GetRadius() + cellB->GetRadius();
         const float distSq = Engine::Math::DistanceSquared(centerA, centerB);
 
-        if (distSq < minDistance * minDistance && distSq > 0.f)
+        if (distSq < 0.1f || distSq >= minDistance * minDistance)
         {
-            const float dist = std::sqrt(distSq);
-            const sf::Vector2f normal = (centerA - centerB) / dist;
-            const sf::Vector2f separation = normal * ((minDistance - dist) * 1.f);
-
-            cellA->GetTransform().Move(separation);
-            cellB->GetTransform().Move(-separation);
+            return;
         }
+
+        const float dist = std::sqrt(distSq);
+        const sf::Vector2f normal = (centerA - centerB) / dist;
+        const sf::Vector2f separation = normal * ((minDistance - dist) * .5f);
+
+        cellA->GetTransform().Move(separation);
+        cellB->GetTransform().Move(-separation);
     }
 
     void Game::ResolveEnemyCollision(Cell* cellA, Cell* cellB)
