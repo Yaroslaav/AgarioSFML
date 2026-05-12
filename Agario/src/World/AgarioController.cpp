@@ -24,6 +24,16 @@ namespace Agario
         return m_acceptableRadius;
     }
 
+    void AgarioController::SetUseCellRadiusForAcceptance(const bool useCellRadiusForAcceptance)
+    {
+        m_useCellRadiusForAcceptance = useCellRadiusForAcceptance;
+    }
+
+    bool AgarioController::UsesCellRadiusForAcceptance() const
+    {
+        return m_useCellRadiusForAcceptance;
+    }
+
     Cell* AgarioController::GetPrimaryCell() const
     {
         return m_controlledCells.GetFirstActiveCell();
@@ -44,7 +54,10 @@ namespace Agario
 
         const sf::Vector2f delta = target - cell->GetActorPosition();
         const float distanceSquared = delta.x * delta.x + delta.y * delta.y;
-        const float acceptableRadiusSquared = m_acceptableRadius * m_acceptableRadius;
+        const float acceptableRadius = m_useCellRadiusForAcceptance
+            ? m_acceptableRadius + cell->GetRadius()
+            : m_acceptableRadius;
+        const float acceptableRadiusSquared = acceptableRadius * acceptableRadius;
         return distanceSquared < acceptableRadiusSquared;
     }
 

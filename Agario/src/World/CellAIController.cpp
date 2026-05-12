@@ -14,12 +14,14 @@ namespace Agario
         : m_settings(settings.ai)
     {
         SetAcceptableRadius(settings.ai.acceptableRadius);
+        SetUseCellRadiusForAcceptance(settings.ai.useCellRadiusForAcceptance);
     }
 
     CellAIController::CellAIController(const BotSettings &settings, Engine::Actor *pawn)
         : AgarioController(pawn), m_settings(settings.ai)
     {
         SetAcceptableRadius(settings.ai.acceptableRadius);
+        SetUseCellRadiusForAcceptance(settings.ai.useCellRadiusForAcceptance);
     }
 
     void CellAIController::BeginPlay(Engine::Application &app)

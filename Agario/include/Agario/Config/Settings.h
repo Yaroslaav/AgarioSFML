@@ -25,7 +25,8 @@ namespace Agario
 
     struct BotAISettings
     {
-        float acceptableRadius = 4.f;
+        float acceptableRadius = 0.f;
+        bool useCellRadiusForAcceptance = true;
         float roamingRadius = 500.f;
         float retargetInterval = 1.5f;
     };

@@ -20,6 +20,9 @@ namespace Agario
         void SetAcceptableRadius(float acceptableRadius);
         [[nodiscard]] float GetAcceptableRadius() const;
 
+        void SetUseCellRadiusForAcceptance(bool useCellRadiusForAcceptance);
+        [[nodiscard]] bool UsesCellRadiusForAcceptance() const;
+
     protected:
         [[nodiscard]] Cell* GetPrimaryCell() const;
         void MoveControlledCellsToward(const sf::Vector2f& destination) const;
@@ -33,6 +36,7 @@ namespace Agario
 
     private:
         ControlledCellGroup m_controlledCells;
-        float m_acceptableRadius = 4.f;
+        float m_acceptableRadius = 0.f;
+        bool m_useCellRadiusForAcceptance = false;
     };
 }
