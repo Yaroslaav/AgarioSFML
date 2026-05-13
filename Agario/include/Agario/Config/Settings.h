@@ -13,6 +13,7 @@ namespace Agario
         float thresholdRatio = 0.8f;
         float massGainFactor = 0.4f;
         float radiusPerMass = 5.f;
+        float minSplitCellMass = 20.f;
     };
 
     struct PlayerSettings

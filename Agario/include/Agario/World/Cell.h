@@ -29,6 +29,11 @@ namespace Agario
             return m_massComponent->CanConsume(other.GetMass());
         }
 
+        [[nodiscard]] bool CanSplit() const
+        {
+            return m_massComponent->CanSplit();
+        }
+
         [[nodiscard]] int GetTeamId() const
         {
             return m_teamId;

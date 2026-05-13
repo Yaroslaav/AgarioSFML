@@ -27,6 +27,11 @@ namespace Agario
             return otherMass <= m_currentMass * m_consumeSettings.thresholdRatio;
         }
 
+        [[nodiscard]] bool CanSplit() const
+        {
+            return m_currentMass >= m_consumeSettings.minSplitCellMass * 2.f;
+        }
+
         [[nodiscard]] ConsumeSettings GetConsumeSettings() const
         {
             return m_consumeSettings;

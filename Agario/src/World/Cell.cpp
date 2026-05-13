@@ -35,7 +35,12 @@ namespace Agario
 
     Cell* Cell::Split()
     {
-        float newMass = m_massComponent->GetMass() / 2;
+        if (!CanSplit())
+        {
+            return nullptr;
+        }
+
+        const float newMass = m_massComponent->GetMass() / 2.f;
         m_massComponent->SetMass(newMass);
         return GetWorld<AgarioWorld>()->SpawnActor<Cell>(
             m_shape.getFillColor(),
