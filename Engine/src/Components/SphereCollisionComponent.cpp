@@ -34,7 +34,7 @@ namespace Engine
             return false;
         }
 
-        const std::vector<sf::Vector2f> directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+        const std::vector<sf::Vector2f> directions = {{0, .9}, {.9, 0}, {0, -.9}, {-.9, 0}};
 
         for (const auto & dir : directions)
         {
