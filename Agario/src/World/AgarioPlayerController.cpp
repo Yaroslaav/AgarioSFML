@@ -20,7 +20,6 @@ namespace Agario
     {
         AgarioController::BeginPlay(app);
 
-        std::cout << "split";
         app.GetInput().AddNewBind(Settings.input.playerSplitKey, Tags::Agario::Ability_Split)
             .OnPressedOnce.AddListener([this]()
             {

@@ -125,7 +125,7 @@ namespace Agario
     float CellAIController::GetDistanceSquaredToCell(const Cell &cell, const Cell &otherCell, const bool includeRadius) const
     {
         const float distanceSquared = Engine::Math::DistanceSquared(cell.GetActorPosition(), otherCell.GetActorPosition());
-        Engine::DebugSystem::DrawLine(cell.GetActorPosition(), otherCell.GetActorPosition(), sf::Color::Green);
+        //Engine::DebugSystem::DrawLine(cell.GetActorPosition(), otherCell.GetActorPosition(), sf::Color::Green);
         
         if (!includeRadius)
         {
