@@ -1,6 +1,8 @@
 #include "Agario/Config/Settings.h"
 #include "Agario/World/CellAIController.h"
 
+#include <iostream>
+
 #include "Agario/GameplayTags/GameTags.h"
 #include "Agario/World/AgarioWorld.h"
 #include "Agario/World/Cell.h"
@@ -122,8 +124,15 @@ namespace Agario
 
     float CellAIController::GetDistanceSquaredToCell(const Cell &cell, const Cell &otherCell, const bool includeRadius) const
     {
-        const float distance = Engine::Math::DistanceSquared(cell.GetActorPosition(), otherCell.GetActorPosition());
-        return includeRadius ? distance - (cell.GetRadius() + otherCell.GetRadius()) : distance;
+        const float distanceSquared = Engine::Math::DistanceSquared(cell.GetActorPosition(), otherCell.GetActorPosition());
+        Engine::DebugSystem::DrawLine(cell.GetActorPosition(), otherCell.GetActorPosition(), sf::Color::Green);
+        
+        if (!includeRadius)
+        {
+            return distanceSquared;
+        }
+        const float radiusSum = cell.GetRadius() + otherCell.GetRadius();
+        return distanceSquared - radiusSum * radiusSum;
     }
 
     void CellAIController::OnCellPossessed(Cell& cell)
