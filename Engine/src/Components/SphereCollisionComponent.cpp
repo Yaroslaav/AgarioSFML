@@ -1,5 +1,6 @@
 #include "Engine/Components/SphereCollisionComponent.h"
 
+#include "Engine/Math/MathUtils.h"
 #include "Engine/World/Actor.h"
 
 namespace Engine
@@ -33,17 +34,8 @@ namespace Engine
         {
             return false;
         }
-
-        const std::vector<sf::Vector2f> directions = {{0, .9}, {.9, 0}, {0, -.9}, {-.9, 0}};
-
-        for (const auto & dir : directions)
-        {
-            if (!ContainsPoint(other.GetWorldCenter() + other.GetRadius() * dir))
-            {
-                return false;
-            }
-        }
-        return true;
+        const sf::Vector2f delta = other.GetWorldCenter() - GetWorldCenter();
+        return Math::Length(delta) + other.m_radius <= m_radius;
     }
 
     bool SphereCollisionComponent::ContainsPoint(const sf::Vector2f& point) const

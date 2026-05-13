@@ -88,7 +88,7 @@ namespace Agario
 
             for (const Cell* cell : cells)
             {
-                if (cell != nullptr && cell->IsActive() && cell->GetTeamId() == m_teamId)
+                if (cell != nullptr && cell != this && cell->IsActive() && cell->GetTeamId() == m_teamId)
                 {
                     ++activeCellsInGroup;
                 }
