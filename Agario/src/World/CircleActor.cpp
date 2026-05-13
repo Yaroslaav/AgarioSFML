@@ -4,6 +4,7 @@
 
 #include "Engine/Components/SphereCollisionComponent.h"
 #include "Engine/Core/Application.h"
+#include "Engine/Math/MathUtils.h"
 
 namespace Agario
 {
@@ -26,16 +27,7 @@ namespace Agario
     void CircleActor::ConstrainToWorldBounds(const sf::FloatRect& bounds)
     {
         auto& transform = GetTransform();
-        const float minX = bounds.position.x + GetRadius();
-        const float minY = bounds.position.y + GetRadius();
-        const float maxX = bounds.position.x + bounds.size.x - GetRadius();
-        const float maxY = bounds.position.y + bounds.size.y - GetRadius();
-
-        const sf::Vector2f position = transform.GetPosition();
-        transform.SetPosition({
-            std::clamp(position.x, minX, maxX),
-            std::clamp(position.y, minY, maxY)
-        });
+        transform.SetPosition(Engine::Math::ClampToRect(transform.GetPosition(), bounds, GetRadius()));
     }
 
     float CircleActor::GetRenderSortKey() const

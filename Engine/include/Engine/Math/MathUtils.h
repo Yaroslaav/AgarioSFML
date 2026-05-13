@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <cmath>
 
+#include "SFML/Graphics/Rect.hpp"
 #include "SFML/System/Vector2.hpp"
 
 namespace Engine::Math
@@ -96,5 +97,23 @@ namespace Engine::Math
 
         const float scale = newLength / length;
         return {vector.x * scale, vector.y * scale};
+    }
+
+    inline sf::Vector2f ClampToRect(sf::Vector2f position, const sf::FloatRect& bounds, const float padding = 0.f)
+    {
+        const float maxPaddingX = bounds.size.x * 0.5f;
+        const float maxPaddingY = bounds.size.y * 0.5f;
+        const float clampedPaddingX = std::clamp(padding, 0.f, maxPaddingX);
+        const float clampedPaddingY = std::clamp(padding, 0.f, maxPaddingY);
+
+        position.x = std::clamp(
+            position.x,
+            bounds.position.x + clampedPaddingX,
+            bounds.position.x + bounds.size.x - clampedPaddingX);
+        position.y = std::clamp(
+            position.y,
+            bounds.position.y + clampedPaddingY,
+            bounds.position.y + bounds.size.y - clampedPaddingY);
+        return position;
     }
 }
