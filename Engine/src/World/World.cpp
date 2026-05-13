@@ -123,6 +123,13 @@ namespace Engine
         return m_bounds;
     }
 
+    sf::Vector2f World::GetCenter() const
+    {
+        if (!HasBounds())
+            return {};
+        return m_bounds.position + m_bounds.size * 0.5f;
+    }
+
     bool World::HasBounds() const
     {
         return m_hasBounds;

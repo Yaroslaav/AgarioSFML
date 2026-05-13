@@ -20,14 +20,18 @@ namespace Agario
 
         void Tick(Engine::Application &app, float deltaTime) override;
 
+        float GetDistanceToCell(const Cell &cell, const Cell &otherCell, bool includeRadius = false) const;
+        float GetDistanceSquaredToCell(const Cell &cell, const Cell &otherCell, bool includeRadius = false) const;
+
     protected:
         void OnCellPossessed(Cell& cell) override;
         void OnCellUnPossessed(Cell& cell) override;
 
     private:
         [[nodiscard]] bool IsEnemyCellCandidate(const Cell& cell, const Cell* otherCell) const;
-        [[nodiscard]] Cell* FindNearestThreat(const Cell& cell) const;
+        [[nodiscard]] Cell* FindNearestThreat(const Cell &cell) const;
         [[nodiscard]] Cell* FindNearestPrey(const Cell& cell) const;
+        [[nodiscard]] Cell* FindNearestCell(const Cell &cell, const std::function<bool(const Cell &)> &filter) const;
         [[nodiscard]] sf::Vector2f GetFleeTarget(const Cell& cell, const Cell& threat) const;
 
         BotAISettings m_settings;

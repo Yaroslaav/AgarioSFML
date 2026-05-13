@@ -55,6 +55,7 @@ namespace Engine
         [[nodiscard]] Camera* GetActiveCamera() const;
         void SetBounds(const sf::FloatRect& bounds);
         [[nodiscard]] const sf::FloatRect& GetBounds() const;
+        [[nodiscard]] sf::Vector2f GetCenter() const;
         [[nodiscard]] bool HasBounds() const;
         [[nodiscard]] sf::Vector2f GetRandomPositionInBounds(float padding = 0.f);
 

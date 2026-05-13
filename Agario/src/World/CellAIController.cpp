@@ -115,6 +115,17 @@ namespace Agario
         }
     }
 
+    float CellAIController::GetDistanceToCell(const Cell &cell, const Cell &otherCell, const bool includeRadius) const
+    {
+        return sqrt(GetDistanceSquaredToCell(cell, otherCell, includeRadius));
+    }
+
+    float CellAIController::GetDistanceSquaredToCell(const Cell &cell, const Cell &otherCell, const bool includeRadius) const
+    {
+        const float distance = Engine::Math::DistanceSquared(cell.GetActorPosition(), otherCell.GetActorPosition());
+        return includeRadius ? distance - (cell.GetRadius() + otherCell.GetRadius()) : distance;
+    }
+
     void CellAIController::OnCellPossessed(Cell& cell)
     {
         m_onPawnDeathEventHandle = cell.OnDeath.AddListener([this](Actor* causer) mutable
@@ -141,41 +152,15 @@ namespace Agario
 
     Cell* CellAIController::FindNearestThreat(const Cell& cell) const
     {
-        const auto* world = GetWorld<AgarioWorld>();
-        if (world == nullptr)
-        {
-            return nullptr;
-        }
-
-        Cell* nearestThreat = nullptr;
-        float nearestThreatDistanceSquared = m_settings.threatDetectionRadius * m_settings.threatDetectionRadius;
-
-        for (Cell* otherCell : world->GetAllActorsOfClass<Cell>())
-        {
-            if (!IsEnemyCellCandidate(cell, otherCell))
-            {
-                continue;
-            }
-
-            if (!otherCell->CanConsume(cell))
-            {
-                continue;
-            }
-
-            const float distanceSquared = Engine::Math::DistanceSquared(
-                cell.GetActorPosition(),
-                otherCell->GetActorPosition());
-            if (distanceSquared < nearestThreatDistanceSquared)
-            {
-                nearestThreatDistanceSquared = distanceSquared;
-                nearestThreat = otherCell;
-            }
-        }
-
-        return nearestThreat;
+        return FindNearestCell(cell, [&cell](const Cell& otherCell) { return otherCell.CanConsume(cell); });
     }
 
     Cell* CellAIController::FindNearestPrey(const Cell& cell) const
+    {
+        return FindNearestCell(cell, [&cell](const Cell& otherCell) { return cell.CanConsume(otherCell); });
+    }
+
+    Cell* CellAIController::FindNearestCell(const Cell &cell, const std::function<bool(const Cell&)> &filter) const
     {
         const auto* world = GetWorld<AgarioWorld>();
         if (world == nullptr)
@@ -193,14 +178,13 @@ namespace Agario
                 continue;
             }
 
-            if (!cell.CanConsume(*otherCell))
+            if (!filter(*otherCell))
             {
                 continue;
             }
 
-            const float distanceSquared = Engine::Math::DistanceSquared(
-                cell.GetActorPosition(),
-                otherCell->GetActorPosition());
+
+            const float distanceSquared = GetDistanceSquaredToCell(cell, *otherCell, true);
             if (distanceSquared < nearestPreyDistanceSquared)
             {
                 nearestPreyDistanceSquared = distanceSquared;
@@ -214,17 +198,14 @@ namespace Agario
     sf::Vector2f CellAIController::GetFleeTarget(const Cell& cell, const Cell& threat) const
     {
         const sf::Vector2f cellPosition = cell.GetActorPosition();
-        const sf::Vector2f threatPosition = threat.GetActorPosition();
-        sf::Vector2f fleeDirection = Engine::Math::NormalizeOrZero(cellPosition - threatPosition);
+        sf::Vector2f fleeDirection = Engine::Math::NormalizeOrZero(cellPosition - threat.GetActorPosition());
 
         if (Engine::Math::IsNearlyZero(fleeDirection))
         {
             const auto* world = GetWorld<AgarioWorld>();
             if (world != nullptr && world->HasBounds())
             {
-                const sf::FloatRect& bounds = world->GetBounds();
-                const sf::Vector2f worldCenter = bounds.position + bounds.size * .5f;
-                fleeDirection = Engine::Math::NormalizeOrZero(cellPosition - worldCenter);
+                fleeDirection = Engine::Math::NormalizeOrZero(cellPosition - world->GetCenter());
             }
         }
 
