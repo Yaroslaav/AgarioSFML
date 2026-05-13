@@ -60,6 +60,25 @@ namespace Agario
             return;
         }
 
+        if (Cell* prey = FindNearestPrey(*cell))
+        {
+            m_targetPosition = prey->GetActorPosition();
+            m_currentState = Tags::Agario::AI_State_Chasing;
+        }
+        else if (m_currentState == Tags::Agario::AI_State_Chasing)
+        {
+            m_currentState = Tags::Agario::AI_State_Deciding;
+        }
+
+        if (m_currentState == Tags::Agario::AI_State_Chasing)
+        {
+            Engine::DebugSystem::DrawLine(cell->GetActorPosition(), m_targetPosition, sf::Color(255, 160, 40));
+            Engine::DebugSystem::DrawCircle(m_targetPosition, 10.f, sf::Color::Yellow);
+
+            MoveControlledCellsToward(m_targetPosition);
+            return;
+        }
+
         if (m_currentState == Tags::Agario::AI_State_Deciding)
         {
             auto* world = GetWorld<AgarioWorld>();
@@ -110,6 +129,16 @@ namespace Agario
         cell.OnDeath.RemoveListener(m_onPawnDeathEventHandle);
     }
 
+    bool CellAIController::IsEnemyCellCandidate(const Cell& cell, const Cell* otherCell) const
+    {
+        if (otherCell == nullptr || otherCell == &cell || !otherCell->IsActive())
+        {
+            return false;
+        }
+
+        return cell.GetTeamId() == -1 || cell.GetTeamId() != otherCell->GetTeamId();
+    }
+
     Cell* CellAIController::FindNearestThreat(const Cell& cell) const
     {
         const auto* world = GetWorld<AgarioWorld>();
@@ -123,12 +152,7 @@ namespace Agario
 
         for (Cell* otherCell : world->GetAllActorsOfClass<Cell>())
         {
-            if (otherCell == nullptr || otherCell == &cell || !otherCell->IsActive())
-            {
-                continue;
-            }
-
-            if (cell.GetTeamId() != -1 && cell.GetTeamId() == otherCell->GetTeamId())
+            if (!IsEnemyCellCandidate(cell, otherCell))
             {
                 continue;
             }
@@ -149,6 +173,42 @@ namespace Agario
         }
 
         return nearestThreat;
+    }
+
+    Cell* CellAIController::FindNearestPrey(const Cell& cell) const
+    {
+        const auto* world = GetWorld<AgarioWorld>();
+        if (world == nullptr)
+        {
+            return nullptr;
+        }
+
+        Cell* nearestPrey = nullptr;
+        float nearestPreyDistanceSquared = m_settings.chaseDetectionRadius * m_settings.chaseDetectionRadius;
+
+        for (Cell* otherCell : world->GetAllActorsOfClass<Cell>())
+        {
+            if (!IsEnemyCellCandidate(cell, otherCell))
+            {
+                continue;
+            }
+
+            if (!cell.CanConsume(*otherCell))
+            {
+                continue;
+            }
+
+            const float distanceSquared = Engine::Math::DistanceSquared(
+                cell.GetActorPosition(),
+                otherCell->GetActorPosition());
+            if (distanceSquared < nearestPreyDistanceSquared)
+            {
+                nearestPreyDistanceSquared = distanceSquared;
+                nearestPrey = otherCell;
+            }
+        }
+
+        return nearestPrey;
     }
 
     sf::Vector2f CellAIController::GetFleeTarget(const Cell& cell, const Cell& threat) const

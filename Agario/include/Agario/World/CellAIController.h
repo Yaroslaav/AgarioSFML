@@ -25,7 +25,9 @@ namespace Agario
         void OnCellUnPossessed(Cell& cell) override;
 
     private:
+        [[nodiscard]] bool IsEnemyCellCandidate(const Cell& cell, const Cell* otherCell) const;
         [[nodiscard]] Cell* FindNearestThreat(const Cell& cell) const;
+        [[nodiscard]] Cell* FindNearestPrey(const Cell& cell) const;
         [[nodiscard]] sf::Vector2f GetFleeTarget(const Cell& cell, const Cell& threat) const;
 
         BotAISettings m_settings;

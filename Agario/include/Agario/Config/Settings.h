@@ -31,6 +31,7 @@ namespace Agario
         float roamingRadius = 500.f;
         float retargetInterval = 1.5f;
         float threatDetectionRadius = 450.f;
+        float chaseDetectionRadius = 500.f;
         float fleeDistance = 650.f;
         float safeThreatRadiusMultiplier = 1.25f;
     };
