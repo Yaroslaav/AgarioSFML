@@ -19,6 +19,7 @@ namespace Engine
 
         void SetFocusActor(const Actor& target);
         void ClearFocusActor();
+        [[nodiscard]] bool IsFocusedOn(const Actor& target) const;
 
         sf::Vector2f GetCenter() const
         {

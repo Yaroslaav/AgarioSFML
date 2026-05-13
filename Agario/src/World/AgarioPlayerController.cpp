@@ -6,6 +6,8 @@
 #include "Agario/GameplayTags/GameTags.h"
 #include "Agario/World/Cell.h"
 #include "Engine/Core/Application.h"
+#include "Engine/View/Camera.h"
+#include "Engine/World/World.h"
 
 namespace Agario
 {
@@ -32,5 +34,60 @@ namespace Agario
 
         const sf::Vector2f cursorPosition = app.GetWindow().GetMouseWorldPosition();
         MoveControlledCellsToward(cursorPosition);
+    }
+
+    void AgarioPlayerController::OnCellPossessed(Cell& cell)
+    {
+        if (m_cellDeathEventHandles.find(&cell) != m_cellDeathEventHandles.end())
+        {
+            return;
+        }
+
+        Cell* cellPtr = &cell;
+        const Engine::Event<Actor*>::EventHandle handle = cell.OnDeath.AddListener([this, cellPtr](Actor*)
+        {
+            RefocusCameraIfFocusedCellDied(*cellPtr);
+        });
+        m_cellDeathEventHandles.emplace(&cell, handle);
+    }
+
+    void AgarioPlayerController::OnCellUnPossessed(Cell& cell)
+    {
+        const auto it = m_cellDeathEventHandles.find(&cell);
+        if (it == m_cellDeathEventHandles.end())
+        {
+            return;
+        }
+
+        cell.OnDeath.RemoveListener(it->second);
+        m_cellDeathEventHandles.erase(it);
+    }
+
+    void AgarioPlayerController::RefocusCameraIfFocusedCellDied(const Cell& deadCell) const
+    {
+        Engine::World* world = GetWorld();
+        if (world == nullptr)
+        {
+            return;
+        }
+
+        Engine::Camera* camera = world->GetActiveCamera();
+        if (camera == nullptr)
+        {
+            return;
+        }
+
+        if (!camera->IsFocusedOn(deadCell))
+        {
+            return;
+        }
+
+        Cell* cell = GetPrimaryCell();
+        if (cell == nullptr)
+        {
+            return;
+        }
+
+        camera->SetFocusActor(*cell);
     }
 }

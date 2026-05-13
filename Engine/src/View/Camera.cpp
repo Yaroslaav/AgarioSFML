@@ -39,6 +39,11 @@ namespace Engine
         m_focusedTransform = nullptr;
     }
 
+    bool Camera::IsFocusedOn(const Actor& target) const
+    {
+        return m_focusedTransform == target.GetComponent<TransformComponent>();
+    }
+
     void Camera::Tick(Application &app, const float deltaTime)
     {
         Actor::Tick(app, deltaTime);

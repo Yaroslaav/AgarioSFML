@@ -11,7 +11,13 @@ namespace Agario
 
     void AgarioController::Split()
     {
-        m_controlledCells.SplitAll();
+        for (Cell* splitCell : m_controlledCells.SplitAll())
+        {
+            if (splitCell != nullptr)
+            {
+                OnCellPossessed(*splitCell);
+            }
+        }
     }
 
     void AgarioController::SetAcceptableRadius(const float acceptableRadius)

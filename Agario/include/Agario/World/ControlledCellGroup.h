@@ -14,7 +14,7 @@ namespace Agario
         void Remove(Cell& cell);
 
         void MoveToward(const sf::Vector2f& destination) const;
-        void SplitAll();
+        [[nodiscard]] std::vector<Cell*> SplitAll();
 
         [[nodiscard]] Cell* GetFirstActiveCell() const;
 

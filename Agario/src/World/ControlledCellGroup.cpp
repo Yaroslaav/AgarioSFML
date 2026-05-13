@@ -44,8 +44,9 @@ namespace Agario
         }
     }
 
-    void ControlledCellGroup::SplitAll()
+    std::vector<Cell*> ControlledCellGroup::SplitAll()
     {
+        std::vector<Cell*> splitCells;
         const std::vector<Cell*> cellsToSplit = m_cells;
 
         for (Cell* cell : cellsToSplit)
@@ -58,8 +59,11 @@ namespace Agario
             if (Cell* splitCell = cell->Split())
             {
                 Add(*splitCell);
+                splitCells.push_back(splitCell);
             }
         }
+
+        return splitCells;
     }
 
     Cell* ControlledCellGroup::GetFirstActiveCell() const
