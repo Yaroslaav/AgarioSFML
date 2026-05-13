@@ -34,6 +34,13 @@ namespace Agario
             return m_massComponent->CanSplit();
         }
 
+        [[nodiscard]] bool CanMerge() const
+        {
+            return m_splitMergeTimer <= 0.f;
+        }
+
+        [[nodiscard]] float GetMergeProgress() const;
+
         [[nodiscard]] int GetTeamId() const
         {
             return m_teamId;
@@ -46,12 +53,17 @@ namespace Agario
 
         Cell* Split();
 
+        void Tick(Engine::Application& app, float deltaTime) override;
         void Die(Actor& causer);
         Engine::Event<Actor*> OnDeath;
 
     private:
+        void StartSplitMergeTimer(float mergeDelay);
+
         MassComponent* m_massComponent = nullptr;
         Engine::MovementComponent* m_movementComponent = nullptr;
         int m_teamId = -1;
+        float m_splitMergeTimer = 0.f;
+        float m_splitMergeDelay = 0.f;
     };
 }

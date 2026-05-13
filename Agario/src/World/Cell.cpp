@@ -1,7 +1,9 @@
 #include "Agario/World/Cell.h"
 
 #include "Agario/World/AgarioWorld.h"
+#include "Engine/Core/Application.h"
 #include "Engine/Components/MovementComponent.h"
+#include <algorithm>
 #include <cmath>
 
 namespace Agario
@@ -33,6 +35,16 @@ namespace Agario
         m_massComponent->AddMass(amount);
     }
 
+    float Cell::GetMergeProgress() const
+    {
+        if (m_splitMergeDelay <= 0.f)
+        {
+            return 1.f;
+        }
+
+        return 1.f - std::clamp(m_splitMergeTimer / m_splitMergeDelay, 0.f, 1.f);
+    }
+
     Cell* Cell::Split()
     {
         if (!CanSplit())
@@ -41,14 +53,29 @@ namespace Agario
         }
 
         const float newMass = m_massComponent->GetMass() / 2.f;
+        const ConsumeSettings consumeSettings = m_massComponent->GetConsumeSettings();
         m_massComponent->SetMass(newMass);
-        return GetWorld<AgarioWorld>()->SpawnActor<Cell>(
+        StartSplitMergeTimer(consumeSettings.splitMergeDelay);
+
+        Cell* splitCell = GetWorld<AgarioWorld>()->SpawnActor<Cell>(
             m_shape.getFillColor(),
             GetTransform().GetPosition(),
             m_movementComponent->GetMaxSpeed(),
             newMass,
-            m_massComponent->GetConsumeSettings(),
+            consumeSettings,
             m_teamId);
+        splitCell->StartSplitMergeTimer(consumeSettings.splitMergeDelay);
+        return splitCell;
+    }
+
+    void Cell::Tick(Engine::Application& app, const float deltaTime)
+    {
+        CircleActor::Tick(app, deltaTime);
+
+        if (m_splitMergeTimer > 0.f)
+        {
+            m_splitMergeTimer = std::max(0.f, m_splitMergeTimer - deltaTime);
+        }
     }
 
     void Cell::Die(Actor &causer)
@@ -83,5 +110,11 @@ namespace Agario
         }
 
         OnDeath.Broadcast(&causer);
+    }
+
+    void Cell::StartSplitMergeTimer(const float mergeDelay)
+    {
+        m_splitMergeDelay = std::max(0.f, mergeDelay);
+        m_splitMergeTimer = m_splitMergeDelay;
     }
 }

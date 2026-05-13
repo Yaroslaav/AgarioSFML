@@ -14,6 +14,7 @@ namespace Agario
         float massGainFactor = 0.4f;
         float radiusPerMass = 5.f;
         float minSplitCellMass = 20.f;
+        float splitMergeDelay = 8.f;
     };
 
     struct PlayerSettings

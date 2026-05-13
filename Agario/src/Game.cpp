@@ -142,14 +142,33 @@ namespace Agario
         const float minDistance = cellA->GetRadius() + cellB->GetRadius();
         const float distSq = Engine::Math::DistanceSquared(centerA, centerB);
 
-        if (distSq < 0.1f || distSq >= minDistance * minDistance)
+        if (distSq >= minDistance * minDistance)
         {
             return;
         }
 
-        const float dist = std::sqrt(distSq);
-        const sf::Vector2f normal = (centerA - centerB) / dist;
-        const sf::Vector2f separation = normal * ((minDistance - dist) * .5f);
+        if (cellA->CanMerge() && cellB->CanMerge())
+        {
+            Cell* largerCell = cellA;
+            Cell* smallerCell = cellB;
+
+            if (cellB->GetMass() > cellA->GetMass())
+            {
+                largerCell = cellB;
+                smallerCell = cellA;
+            }
+
+            largerCell->Grow(smallerCell->GetMass());
+            smallerCell->Die(*largerCell);
+            return;
+        }
+
+        const bool centersOverlap = distSq < 0.1f;
+        const float dist = centersOverlap ? 0.f : std::sqrt(distSq);
+        const sf::Vector2f normal = centersOverlap ? sf::Vector2f{1.f, 0.f} : (centerA - centerB) / dist;
+        const float mergeProgress = std::max(cellA->GetMergeProgress(), cellB->GetMergeProgress());
+        const float collisionStrength = 1.f - mergeProgress;
+        const sf::Vector2f separation = normal * ((minDistance - dist) * .5f * collisionStrength);
 
         cellA->GetTransform().Move(separation);
         cellB->GetTransform().Move(-separation);
