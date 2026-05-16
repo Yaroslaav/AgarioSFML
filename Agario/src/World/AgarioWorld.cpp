@@ -21,7 +21,7 @@ namespace Agario
     {
         m_chunkGrid.ClearMass();
 
-        for (const Food* food : GetAllActorsOfClass<Food>())
+        for (Food* food : GetAllActorsOfClass<Food>())
         {
             if (food != nullptr && food->IsActive())
             {

@@ -43,24 +43,24 @@ namespace Agario
     {
         auto* cellCollision = cell.GetCollision();
 
-        for (Food* food : world.GetAllActorsOfClass<Food>())
+        world.GetChunkGrid().ForEachFoodInRadius(cell.GetActorPosition(), cell.GetRadius(), [&](Food* food)
         {
             if (food == nullptr || !food->IsActive())
             {
-                continue;
+                return;
             }
 
             auto* foodCollision = food->GetCollision();
             if (!cellCollision->FullyCovers(*foodCollision))
             {
-                continue;
+                return;
             }
 
             cell.Grow(food->GetMass());
             food->GetTransform().SetPosition(world.GetRandomPositionInBounds(food->GetRadius()));
             foodCollision->OnBeginOverlap.Broadcast(&cell, cellCollision);
             cellCollision->OnBeginOverlap.Broadcast(food, foodCollision);
-        }
+        });
     }
 
     void CollisionSystem::ResolveCellCollision(Cell& cellA, Cell& cellB)

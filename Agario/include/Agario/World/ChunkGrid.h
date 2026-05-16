@@ -23,6 +23,7 @@ namespace Agario
     {
         float foodMass = 0.f;
         float enemyMass = 0.f;
+        std::vector<Food*> foodActors;
     };
 
     struct GridBounds
@@ -38,7 +39,7 @@ namespace Agario
     public:
         void Initialize(const sf::FloatRect& bounds, const ChunkSettings& settings);
         void ClearMass();
-        void AddFood(const Food& food);
+        void AddFood(Food& food);
         void AddCell(const Cell& cell);
         void Draw(Engine::Window& window) const;
 
@@ -62,6 +63,29 @@ namespace Agario
         [[nodiscard]] sf::Vector2f GetChunkCenter(int col, int row) const;
         [[nodiscard]] sf::Vector2f GetBestFoodChunkPositionInRadius(const sf::Vector2f& center, float radius) const;
         [[nodiscard]] sf::Vector2f GetRandomChunkPositionInRadius(const sf::Vector2f& center, float radius) const;
+
+        template<typename TCallback>
+        void ForEachFoodInRadius(const sf::Vector2f& center, const float radius, TCallback&& callback) const
+        {
+            if (!IsInitialized())
+            {
+                return;
+            }
+
+            const auto [startCol, startRow, endCol, endRow] = GetGridBounds(center, radius);
+            for (int row = startRow; row <= endRow; ++row)
+            {
+                const int rowOffset = row * m_columns;
+                for (int col = startCol; col <= endCol; ++col)
+                {
+                    const ChunkData& chunk = m_chunks[rowOffset + col];
+                    for (Food* food : chunk.foodActors)
+                    {
+                        callback(food);
+                    }
+                }
+            }
+        }
 
     private:
         [[nodiscard]] GridBounds GetGridBounds(const sf::Vector2f& center, float radius) const;

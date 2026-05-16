@@ -46,10 +46,11 @@ namespace Agario
         {
             chunk.foodMass = 0.f;
             chunk.enemyMass = 0.f;
+            chunk.foodActors.clear();
         }
     }
 
-    void ChunkGrid::AddFood(const Food& food)
+    void ChunkGrid::AddFood(Food& food)
     {
         const int index = GetChunkIndex(food.GetActorPosition());
         if (index < 0)
@@ -57,7 +58,9 @@ namespace Agario
             return;
         }
 
-        m_chunks[static_cast<std::size_t>(index)].foodMass += food.GetMass();
+        ChunkData& chunk = m_chunks[static_cast<std::size_t>(index)];
+        chunk.foodMass += food.GetMass();
+        chunk.foodActors.push_back(&food);
     }
 
     void ChunkGrid::AddCell(const Cell& cell)
