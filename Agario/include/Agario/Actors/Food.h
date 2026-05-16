@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Agario/Config/Settings.h"
-#include "Agario/World/CircleActor.h"
+#include "Agario/Actors/CircleActor.h"
 
 namespace Agario
 {

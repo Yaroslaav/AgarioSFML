@@ -1,6 +1,6 @@
-#include "Agario/World/AgarioController.h"
+#include "Agario/Controllers/AgarioController.h"
 
-#include "Agario/World/Cell.h"
+#include "Agario/Actors/Cell.h"
 
 namespace Agario
 {

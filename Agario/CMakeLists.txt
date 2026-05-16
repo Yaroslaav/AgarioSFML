@@ -1,28 +1,19 @@
+file(GLOB_RECURSE AGARIO_SOURCES CONFIGURE_DEPENDS
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
+)
+
+file(GLOB_RECURSE AGARIO_HEADERS CONFIGURE_DEPENDS
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
+)
+
 add_executable(Agario
-        src/main.cpp
-        src/Game.cpp
-        src/Components/MassComponent.cpp
-        src/World/CircleActor.cpp
-        src/World/Cell.cpp
-        include/Agario/Config/Settings.h
-        include/Agario/Component/MassComponent.h
-        include/Agario/World/CircleActor.h
-        include/Agario/World/Cell.h
-        include/Agario/GameplayTags/GameTags.h
-        include/Agario/World/Food.h
-        src/World/Food.cpp
-        include/Agario/World/AgarioController.h
-        src/World/AgarioController.cpp
-        include/Agario/World/CellAIController.h
-        src/World/CellAIController.cpp
-        include/Agario/World/ControlledCellGroup.h
-        src/World/ControlledCellGroup.cpp
-        include/Agario/World/AgarioWorld.h
-        src/World/AgarioWorld.cpp
-        include/Agario/World/ChunkGrid.h
-        src/World/ChunkGrid.cpp
-        include/Agario/World/AgarioPlayerController.h
-        src/World/AgarioPlayerController.cpp
+        ${AGARIO_SOURCES}
+        ${AGARIO_HEADERS}
+)
+
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES
+        ${AGARIO_SOURCES}
+        ${AGARIO_HEADERS}
 )
 
 target_include_directories(Agario PUBLIC

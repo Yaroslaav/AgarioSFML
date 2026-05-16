@@ -1,4 +1,4 @@
-#include "Agario/World/Food.h"
+#include "Agario/Actors/Food.h"
 
 namespace Agario
 {

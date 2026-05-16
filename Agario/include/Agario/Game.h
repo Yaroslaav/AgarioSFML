@@ -14,10 +14,6 @@ namespace Agario
         void OnRender(Engine::Application& app) override;
         void OnShutdown(Engine::Application& app) override;
 
-        void CheckCollision();
-        void ResolveTeamCollision(Cell* cellA, Cell* cellB);
-        void ResolveEnemyCollision(Cell* cellA, Cell* cellB);
-
     private:
         AgarioWorld m_world;
     };

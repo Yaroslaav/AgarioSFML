@@ -1,4 +1,4 @@
-#include "Agario/World/Cell.h"
+#include "Agario/Actors/Cell.h"
 
 #include "Agario/World/AgarioWorld.h"
 #include "Engine/Core/Application.h"
@@ -26,8 +26,7 @@ namespace Agario
         m_movementComponent = AddComponent<Engine::MovementComponent>();
         m_movementComponent->SetMaxSpeed(maxSpeed);
 
-        const float calculatedRadius = std::sqrt(startMass) * consumeSettings.radiusPerMass;
-        m_massComponent = AddComponent<MassComponent>(startMass, calculatedRadius, consumeSettings);
+        m_massComponent = AddComponent<MassComponent>(startMass, consumeSettings);
     }
 
     void Cell::Grow(const float amount)

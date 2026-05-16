@@ -1,38 +1,19 @@
+file(GLOB_RECURSE ENGINE_SOURCES CONFIGURE_DEPENDS
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
+)
+
+file(GLOB_RECURSE ENGINE_HEADERS CONFIGURE_DEPENDS
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
+)
+
 add_library(Engine STATIC
-        src/Core/Application.cpp
-        src/Core/DebugSystem.cpp
-        include/Engine/Core/DebugSystem.h
-        include/Engine/Config/Settings.h
-        include/Engine/Input/InputManager.h
-        include/Engine/Input/BindKey.h
-        src/Input/BindKey.cpp
-        src/Input/InputManager.cpp
-        include/Engine/GameplayTags/GameplayTag.h
-        include/Engine/GameplayTags/GameplayTagContainer.h
-        src/GameplayTags/GameplayTagContainer.cpp
-        include/Engine/Components/ActorComponent.h
-        include/Engine/Components/MovementComponent.h
-        include/Engine/Components/SphereCollisionComponent.h
-        include/Engine/Components/TransformComponent.h
-        src/Components/MovementComponent.cpp
-        src/Components/SphereCollisionComponent.cpp
-        include/Engine/World/Actor.h
-        include/Engine/World/Controller/Controller.h
-        src/World/Actor.cpp
-        include/Engine/View/Window.h
-        include/Engine/View/Camera.h
-        include/Engine/View/RenderHandle.h
-        include/Engine/View/RenderComponent.h
-        include/Engine/View/RenderSystem.h
-        src/View/Camera.cpp
-        src/View/RenderComponent.cpp
-        src/View/RenderSystem.cpp
-        src/View/Window.cpp
-        include/Engine/GameplayTags/GameTags.h
-        include/Engine/World/World.h
-        src/World/World.cpp
-        include/Engine/Helpers/Event.h
-        include/Engine/Math/MathUtils.h
+        ${ENGINE_SOURCES}
+        ${ENGINE_HEADERS}
+)
+
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES
+        ${ENGINE_SOURCES}
+        ${ENGINE_HEADERS}
 )
 
 target_include_directories(Engine PUBLIC

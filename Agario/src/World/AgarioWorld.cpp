@@ -1,7 +1,7 @@
 #include "Agario/World/AgarioWorld.h"
 
-#include "Agario/World/Cell.h"
-#include "Agario/World/Food.h"
+#include "Agario/Actors/Cell.h"
+#include "Agario/Actors/Food.h"
 #include "Engine/View/Window.h"
 
 #include <algorithm>

@@ -1,10 +1,8 @@
-#include "Agario/World/AgarioPlayerController.h"
-
-#include <iostream>
+#include "Agario/Controllers/AgarioPlayerController.h"
 
 #include "Agario/Config/Settings.h"
 #include "Agario/GameplayTags/GameTags.h"
-#include "Agario/World/Cell.h"
+#include "Agario/Actors/Cell.h"
 #include "Engine/Core/Application.h"
 #include "Engine/View/Camera.h"
 #include "Engine/World/World.h"

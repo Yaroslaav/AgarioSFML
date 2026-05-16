@@ -1,14 +1,13 @@
 #include "Agario/Game.h"
 
+#include "Agario/Actors/Cell.h"
+#include "Agario/Actors/Food.h"
 #include "Agario/Config/Settings.h"
-#include "Agario/World/AgarioPlayerController.h"
-#include "Agario/World/Cell.h"
-#include "Agario/World/Food.h"
+#include "Agario/Controllers/AgarioPlayerController.h"
+#include "Agario/Controllers/CellAIController.h"
+#include "Agario/Gameplay/CollisionSystem.h"
 #include "Engine/Core/Application.h"
-#include "Engine/Math/MathUtils.h"
 #include "Engine/View/Camera.h"
-
-#include "Agario/World/CellAIController.h"
 
 namespace Agario
 {
@@ -78,7 +77,7 @@ namespace Agario
     {
         m_world.Tick(app, deltaTime);
 
-        CheckCollision();
+        CollisionSystem::Resolve(m_world);
     }
 
     void Game::OnRender(Engine::Application& app)
@@ -89,116 +88,5 @@ namespace Agario
     void Game::OnShutdown(Engine::Application& app)
     {
         m_world.EndPlay();
-    }
-
-    void Game::CheckCollision()
-    {
-        const auto& players = m_world.GetAllActorsOfClass<Cell>();
-        const auto& food = m_world.GetAllActorsOfClass<Food>();
-
-        for (std::size_t playerIndex = 0; playerIndex < players.size(); ++playerIndex)
-        {
-            Cell* player = players[playerIndex];
-            if (!player->IsActive()) continue;
-
-            auto* playerCollision = player->GetCollision();
-
-            for (auto* foodCell : food)
-            {
-                if (!foodCell->IsActive()) continue;
-
-                auto* foodCellCollision = foodCell->GetCollision();
-                if (playerCollision->FullyCovers(*foodCellCollision))
-                {
-                    player->Grow(foodCell->GetMass());
-                    foodCell->GetTransform().SetPosition(m_world.GetRandomPositionInBounds(foodCell->GetRadius()));
-                    foodCellCollision->OnBeginOverlap.Broadcast(player, playerCollision);
-                    playerCollision->OnBeginOverlap.Broadcast(foodCell, foodCellCollision);
-                }
-            }
-
-            for (std::size_t otherPlayerIndex = playerIndex + 1; otherPlayerIndex < players.size(); ++otherPlayerIndex)
-            {
-                Cell* otherPlayer = players[otherPlayerIndex];
-                if (!otherPlayer->IsActive()) continue;
-
-                if (player->GetTeamId() != -1 && player->GetTeamId() == otherPlayer->GetTeamId())
-                {
-                    ResolveTeamCollision(player, otherPlayer);
-                }
-                else
-                {
-                    ResolveEnemyCollision(player, otherPlayer);
-                }
-            }
-        }
-    }
-
-    void Game::ResolveTeamCollision(Cell* cellA, Cell* cellB)
-    {
-        const sf::Vector2f centerA = cellA->GetCollision()->GetWorldCenter();
-        const sf::Vector2f centerB = cellB->GetCollision()->GetWorldCenter();
-
-        const float minDistance = cellA->GetRadius() + cellB->GetRadius();
-        const float distSq = Engine::Math::DistanceSquared(centerA, centerB);
-
-        if (distSq >= minDistance * minDistance)
-        {
-            return;
-        }
-
-        if (cellA->CanMerge() && cellB->CanMerge())
-        {
-            Cell* largerCell = cellA;
-            Cell* smallerCell = cellB;
-
-            if (cellB->GetMass() > cellA->GetMass())
-            {
-                largerCell = cellB;
-                smallerCell = cellA;
-            }
-
-            largerCell->Grow(smallerCell->GetMass());
-            smallerCell->Die(*largerCell);
-            return;
-        }
-
-        const bool centersOverlap = distSq < 0.1f;
-        const float dist = centersOverlap ? 0.f : std::sqrt(distSq);
-        const sf::Vector2f normal = centersOverlap ? sf::Vector2f{1.f, 0.f} : (centerA - centerB) / dist;
-        const float mergeProgress = std::max(cellA->GetMergeProgress(), cellB->GetMergeProgress());
-        const float collisionStrength = 1.f - mergeProgress;
-        const sf::Vector2f separation = normal * ((minDistance - dist) * .5f * collisionStrength);
-
-        cellA->GetTransform().Move(separation);
-        cellB->GetTransform().Move(-separation);
-    }
-
-    void Game::ResolveEnemyCollision(Cell* cellA, Cell* cellB)
-    {
-        Cell* largerPlayer = cellA;
-        Cell* smallerPlayer = cellB;
-
-        if (cellB->GetMass() > cellA->GetMass())
-        {
-            largerPlayer = cellB;
-            smallerPlayer = cellA;
-        }
-
-        if (!largerPlayer->CanConsume(*smallerPlayer))
-        {
-            return;
-        }
-
-        auto* largerCollision = largerPlayer->GetCollision();
-        auto* smallerCollision = smallerPlayer->GetCollision();
-        if (!largerCollision->FullyCovers(*smallerCollision))
-        {
-            return;
-        }
-
-        largerPlayer->Grow(smallerPlayer->GetMass() * Settings.gameplay.consume.massGainFactor);
-        smallerPlayer->Die(*largerPlayer);
-        largerCollision->OnBeginOverlap.Broadcast(smallerPlayer, smallerCollision);
     }
 }

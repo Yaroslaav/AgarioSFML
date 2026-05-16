@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Agario/World/ControlledCellGroup.h"
+#include "Agario/Controllers/ControlledCellGroup.h"
 #include "Engine/World/Controller/Controller.h"
 
 #include <SFML/System/Vector2.hpp>

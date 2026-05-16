@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Agario/Component/MassComponent.h"
+#include "Agario/Components/MassComponent.h"
 #include "Agario/Config/Settings.h"
-#include "Agario/World/CircleActor.h"
+#include "Agario/Actors/CircleActor.h"
 #include "Engine/Components/MovementComponent.h"
 
 namespace Agario

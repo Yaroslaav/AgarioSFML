@@ -1,6 +1,6 @@
-#include "Agario/World/ControlledCellGroup.h"
+#include "Agario/Controllers/ControlledCellGroup.h"
 
-#include "Agario/World/Cell.h"
+#include "Agario/Actors/Cell.h"
 #include "Engine/Components/MovementComponent.h"
 #include "Engine/Math/MathUtils.h"
 

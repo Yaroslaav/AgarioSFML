@@ -1,5 +1,5 @@
 #pragma once
-#include "Agario/World/AgarioController.h"
+#include "Agario/Controllers/AgarioController.h"
 #include "Engine/Helpers/Event.h"
 
 #include <unordered_map>

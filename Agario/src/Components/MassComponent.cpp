@@ -1,6 +1,6 @@
-#include "Agario/Component/MassComponent.h"
+#include "Agario/Components/MassComponent.h"
 
-#include "Agario/World/CircleActor.h"
+#include "Agario/Actors/CircleActor.h"
 #include "Engine/World/Actor.h"
 
 #include <algorithm>
@@ -8,7 +8,7 @@
 
 namespace Agario
 {
-    MassComponent::MassComponent(const float startMass, const float initialRadius, const ConsumeSettings& consumeSettings) :
+    MassComponent::MassComponent(const float startMass, const ConsumeSettings& consumeSettings) :
         m_initialMass(std::max(startMass, 0.01f)),
         m_currentMass(m_initialMass),
         m_consumeSettings(consumeSettings)

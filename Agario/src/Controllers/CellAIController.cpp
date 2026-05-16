@@ -1,11 +1,9 @@
 #include "Agario/Config/Settings.h"
-#include "Agario/World/CellAIController.h"
-
-#include <iostream>
+#include "Agario/Controllers/CellAIController.h"
 
 #include "Agario/GameplayTags/GameTags.h"
 #include "Agario/World/AgarioWorld.h"
-#include "Agario/World/Cell.h"
+#include "Agario/Actors/Cell.h"
 #include "Engine/Core/DebugSystem.h"
 #include "Engine/GameplayTags/GameTags.h"
 #include "Engine/Math/MathUtils.h"
