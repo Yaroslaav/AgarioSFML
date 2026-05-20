@@ -103,7 +103,7 @@ namespace Agario
     void Game::OnRender(Engine::Application& app)
     {
         m_world.Render(app);
-        m_ui.Render(app.GetWindow());
+        m_ui.Render(app.GetWindow(), m_world);
     }
 
     void Game::OnShutdown(Engine::Application& app)

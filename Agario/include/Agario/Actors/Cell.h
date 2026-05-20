@@ -48,6 +48,11 @@ namespace Agario
             return m_teamId;
         }
 
+        [[nodiscard]] const std::string& GetNickname() const
+        {
+            return m_nickname;
+        }
+
         void SetTeamId(const int teamId)
         {
             m_teamId = teamId;
