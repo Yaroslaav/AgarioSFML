@@ -93,7 +93,7 @@ namespace Agario
                 }
             }
 
-            isLastActiveCellInGroup = activeCellsInGroup <= 1;
+            isLastActiveCellInGroup = activeCellsInGroup <= 0;
         }
 
         if (isLastActiveCellInGroup)
