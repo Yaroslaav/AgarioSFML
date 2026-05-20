@@ -58,6 +58,17 @@ namespace Engine
             m_renderWindow.draw(drawable);
         }
 
+        template<typename TDrawable>
+        void DrawScreen(const TDrawable& drawable)
+        {
+            const sf::View previousView = m_renderWindow.getView();
+            const sf::Vector2f screenSize = static_cast<sf::Vector2f>(m_renderWindow.getSize());
+
+            m_renderWindow.setView(sf::View(screenSize * 0.5f, screenSize));
+            m_renderWindow.draw(drawable);
+            m_renderWindow.setView(previousView);
+        }
+
     private:
         unsigned int m_frameRate;
         std::string m_title;

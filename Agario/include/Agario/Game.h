@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Core/IGame.h"
+#include "Agario/UI/GameUI.h"
 #include "Agario/World/AgarioWorld.h"
 
 namespace Agario
@@ -16,5 +17,6 @@ namespace Agario
 
     private:
         AgarioWorld m_world;
+        GameUI m_ui;
     };
 }

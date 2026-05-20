@@ -38,6 +38,11 @@ namespace Agario
         app.GetInput().AddNewBind(Settings.input.quitKey, Engine::GameplayTag("Input.Action.Quit"))
             .OnPressedOnce.AddListener([&app]() { app.Close(); });
 
+        app.GetInput().AddNewBind(sf::Keyboard::Key::H, Engine::GameplayTag("Input.Action.Help"))
+            .OnPressedOnce.AddListener([this]() { m_ui.ToggleHelp(); });
+
+        m_ui.Initialize();
+
         m_world.Initialize(Settings.world, Settings.chunks);
 
         Cell* playerCell = m_world.SpawnActor<Cell>(
@@ -96,6 +101,7 @@ namespace Agario
     void Game::OnRender(Engine::Application& app)
     {
         m_world.Render(app);
+        m_ui.Render(app.GetWindow());
     }
 
     void Game::OnShutdown(Engine::Application& app)
