@@ -39,8 +39,8 @@ namespace Agario
 
     struct BotSettings
     {
-        int count = 1;
-        float startMass = 10.f;
+        int count = 10;
+        float startMass = 20.f;
         float maxSpeed = 180.f;
         float spawnPadding = 32.f;
         sf::Color color{120, 220, 120};

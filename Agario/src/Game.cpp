@@ -9,10 +9,23 @@
 #include "Engine/Core/Application.h"
 #include "Engine/View/Camera.h"
 
+#include <iostream>
+
 namespace Agario
 {
     void Game::OnInit(Engine::Application& app)
     {
+        std::cout
+            << "Controls:\n"
+            << "  Move: mouse cursor\n"
+            << "  Split: Space\n"
+            << "  Toggle fullscreen: F11\n"
+            << "  Zoom: = / -\n"
+            << "  Toggle debug: F1\n"
+            << "  Toggle chunk debug: Numpad1\n"
+            << "  Toggle debug traces: Numpad2\n"
+            << "  Quit: Escape\n";
+
         app.GetInput().AddNewBind(Settings.input.debugToggleKey, Engine::GameplayTag("Input.Action.DebugToggle"))
             .OnPressedOnce.AddListener([]() { Engine::DebugSystem::ToggleDebugMode(); });
 
