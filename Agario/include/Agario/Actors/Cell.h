@@ -5,14 +5,16 @@
 #include "Agario/Actors/CircleActor.h"
 #include "Engine/Components/MovementComponent.h"
 
+#include <string>
+
 namespace Agario
 {
     class Cell : public CircleActor
     {
     public:
-        Cell(const sf::Color& color, const sf::Vector2f& startPosition, float maxSpeed, float startMass, const ConsumeSettings& consumeSettings, int teamId = -1);
-        Cell(const PlayerSettings& settings, const sf::Vector2f& startPosition, const ConsumeSettings& consumeSettings, int teamId = -1);
-        Cell(const BotSettings& settings, const sf::Vector2f& startPosition, const ConsumeSettings& consumeSettings, int teamId = -1);
+        Cell(const sf::Color& color, const sf::Vector2f& startPosition, float maxSpeed, float startMass, const ConsumeSettings& consumeSettings, int teamId = -1, std::string nickname = "");
+        Cell(const PlayerSettings& settings, const sf::Vector2f& startPosition, const ConsumeSettings& consumeSettings, int teamId = -1, std::string nickname = "");
+        Cell(const BotSettings& settings, const sf::Vector2f& startPosition, const ConsumeSettings& consumeSettings, int teamId = -1, std::string nickname = "");
 
         void Grow(float amount);
         [[nodiscard]] float GetMass() const
@@ -54,6 +56,7 @@ namespace Agario
         Cell* Split();
 
         void Tick(Engine::Application& app, float deltaTime) override;
+        void Render(Engine::Application& app) override;
         void Die(Actor& causer);
         Engine::Event<Actor*> OnDeath;
 
@@ -62,6 +65,7 @@ namespace Agario
 
         MassComponent* m_massComponent = nullptr;
         Engine::MovementComponent* m_movementComponent = nullptr;
+        std::string m_nickname;
         int m_teamId = -1;
         float m_splitMergeTimer = 0.f;
         float m_splitMergeDelay = 0.f;

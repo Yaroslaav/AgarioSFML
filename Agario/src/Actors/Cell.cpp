@@ -3,24 +3,46 @@
 #include "Agario/World/AgarioWorld.h"
 #include "Engine/Core/Application.h"
 #include "Engine/Components/MovementComponent.h"
+
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/Text.hpp>
+
 #include <algorithm>
 #include <cmath>
+#include <iostream>
+#include <utility>
 
 namespace Agario
 {
-    Cell::Cell(const PlayerSettings& settings, const sf::Vector2f& startPosition, const ConsumeSettings& consumeSettings, const int teamId)
-        : Cell(settings.color, startPosition, settings.maxSpeed, settings.startMass, consumeSettings, teamId)
+    const sf::Font* GetNicknameFont()
+    {
+        static sf::Font font;
+        static const bool loaded = font.openFromFile("assets/Fonts/Tuffy/Tuffy-Bold.ttf");
+        static bool reportedFailure = false;
+
+        if (!loaded && !reportedFailure)
+        {
+            std::cout << "Failed to load nickname font\n";
+            reportedFailure = true;
+        }
+
+        return loaded ? &font : nullptr;
+    }
+
+    Cell::Cell(const PlayerSettings& settings, const sf::Vector2f& startPosition, const ConsumeSettings& consumeSettings, const int teamId, std::string nickname)
+        : Cell(settings.color, startPosition, settings.maxSpeed, settings.startMass, consumeSettings, teamId, std::move(nickname))
     {
     }
 
-    Cell::Cell(const BotSettings& settings, const sf::Vector2f& startPosition, const ConsumeSettings& consumeSettings, const int teamId)
-        : Cell(settings.color, startPosition, settings.maxSpeed, settings.startMass, consumeSettings, teamId)
+    Cell::Cell(const BotSettings& settings, const sf::Vector2f& startPosition, const ConsumeSettings& consumeSettings, const int teamId, std::string nickname)
+        : Cell(settings.color, startPosition, settings.maxSpeed, settings.startMass, consumeSettings, teamId, std::move(nickname))
     {
     }
 
     Cell::Cell(const sf::Color& color, const sf::Vector2f& startPosition, const float maxSpeed,
-               const float startMass, const ConsumeSettings& consumeSettings, const int teamId) :
+               const float startMass, const ConsumeSettings& consumeSettings, const int teamId, std::string nickname) :
         CircleActor(0.f, color, startPosition),
+        m_nickname(std::move(nickname)),
         m_teamId(teamId)
     {
         m_movementComponent = AddComponent<Engine::MovementComponent>();
@@ -62,7 +84,8 @@ namespace Agario
             m_movementComponent->GetMaxSpeed(),
             newMass,
             consumeSettings,
-            m_teamId);
+            m_teamId,
+            m_nickname);
         splitCell->StartSplitMergeTimer(consumeSettings.splitMergeDelay);
         return splitCell;
     }
@@ -75,6 +98,37 @@ namespace Agario
         {
             m_splitMergeTimer = std::max(0.f, m_splitMergeTimer - deltaTime);
         }
+    }
+
+    void Cell::Render(Engine::Application& app)
+    {
+        CircleActor::Render(app);
+
+        if (m_nickname.empty())
+        {
+            return;
+        }
+
+        const sf::Font* font = GetNicknameFont();
+        if (font == nullptr)
+        {
+            return;
+        }
+
+        const unsigned int characterSize = static_cast<unsigned int>(std::clamp(GetRadius() * 0.45f, 12.f, 28.f));
+        sf::Text text(*font, m_nickname, characterSize);
+        text.setFillColor(sf::Color::White);
+        text.setOutlineColor(sf::Color(0, 0, 0, 180));
+        text.setOutlineThickness(2.f);
+
+        const sf::FloatRect localBounds = text.getLocalBounds();
+        text.setOrigin({
+            localBounds.position.x + localBounds.size.x * 0.5f,
+            localBounds.position.y + localBounds.size.y * 0.5f
+        });
+        text.setPosition(GetActorPosition());
+
+        app.GetWindow().Draw(text);
     }
 
     void Cell::Die(Actor &causer)

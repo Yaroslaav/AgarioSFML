@@ -49,7 +49,8 @@ namespace Agario
             Settings.player,
             Settings.player.spawnPosition,
             Settings.gameplay.consume,
-            0);
+            0,
+            "player");
 
         for (int i = 0; i < Settings.bots.count; ++i)
         {
@@ -57,7 +58,8 @@ namespace Agario
                 Settings.bots,
                 m_world.GetRandomPositionInBounds(Settings.bots.spawnPadding),
                 Settings.gameplay.consume,
-                i+1);
+                i + 1,
+                "bot" + std::to_string(i + 1));
 
             m_world.SpawnActor<CellAIController>(Settings.bots, botCell);
         }
